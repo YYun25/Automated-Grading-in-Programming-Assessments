@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>考試列表 - eLearn教師版</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:1200px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-bottom:24px}
+    h1{margin:0 0 24px;font-size:24px;color:#1f2937}
+    .btn{display:inline-block;background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:500;margin-right:8px;margin-bottom:8px}
+    .btn:hover{background:#4338ca}
+    .btn-success{background:#10b981}
+    .btn-success:hover{background:#059669}
+    .btn-secondary{background:#6b7280}
+    .btn-secondary:hover{background:#4b5563}
+    .btn-sm{padding:6px 12px;font-size:12px}
+    .back-link{display:inline-block;margin-bottom:20px;color:#4f46e5;text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .exam-list{display:grid;gap:16px}
+    .exam-item{background:#f8fafc;border-radius:10px;padding:20px;border-left:4px solid #4f46e5}
+    .exam-title{font-size:18px;font-weight:600;color:#1f2937;margin:0 0 8px}
+    .exam-meta{color:#6b7280;font-size:14px;margin:0 0 12px}
+    .exam-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+    .status-draft{background:#fef3c7;color:#92400e}
+    .status-active{background:#dbeafe;color:#1e40af}
+    .status-grading{background:#fce7f3;color:#be185d}
+    .status-completed{background:#d1fae5;color:#065f46}
+    .empty-state{text-align:center;padding:40px;color:#6b7280}
+    .empty-state h3{margin:0 0 8px;color:#374151}
+    .empty-state p{margin:0 0 20px}
+    .search-bar{margin-bottom:20px}
+    .search-bar input{width:300px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
+    .filter-bar{margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap}
+    .filter-btn{padding:8px 16px;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer;font-size:14px}
+    .filter-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .filter-btn:hover{background:#f3f4f6}
+    .filter-btn.active:hover{background:#4338ca}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← 返回儀表板</a>
+    
+    <div class="card">
+      <h1>📋 考試列表</h1>
+      
+      <!-- 搜尋和篩選 -->
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="搜尋考試標題或科目..." onkeyup="filterExams()">
+      </div>
+      
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterByStatus('all')">全部</button>
+        <button class="filter-btn" onclick="filterByStatus('draft')">草稿</button>
+        <button class="filter-btn" onclick="filterByStatus('active')">進行中</button>
+        <button class="filter-btn" onclick="filterByStatus('grading')">批改中</button>
+        <button class="filter-btn" onclick="filterByStatus('completed')">已完成</button>
+      </div>
+
+      <!-- 考試列表 -->
+      {% if exams %}
+        <div class="exam-list" id="examList">
+          {% for exam in exams %}
+            <div class="exam-item" data-status="{{ exam.status }}" data-title="{{ exam.title }}" data-subject="{{ exam.subject }}">
+              <div class="exam-title">{{ exam.title }}</div>
+              <div class="exam-meta">
+                科目：{{ exam.subject }} | 
+                創建時間：{{ exam.created_at.strftime('%Y-%m-%d %H:%M') }} | 
+                狀態：<span class="status status-{{ exam.status }}">{{ exam.status }}</span> |
+                提交數：{{ exam.total_students }} | 
+                已批改：{{ exam.graded_students }}
+              </div>
+              <div class="exam-actions">
+                <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="btn btn-sm">查看詳情</a>
+                {% if exam.status == 'draft' %}
+                  <a href="{{ url_for('upload_answers', exam_id=exam.exam_id) }}" class="btn btn-sm btn-success">上傳答案</a>
+                {% elif exam.status == 'active' %}
+                  <a href="{{ url_for('upload_answers', exam_id=exam.exam_id) }}" class="btn btn-sm btn-success">上傳答案</a>
+                {% elif exam.status == 'completed' %}
+                  <a href="{{ url_for('exam_results', exam_id=exam.exam_id) }}" class="btn btn-sm btn-success">查看結果</a>
+                  <a href="{{ url_for('export_results', exam_id=exam.exam_id) }}" class="btn btn-sm btn-secondary">匯出Excel</a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>還沒有任何考試</h3>
+          <p>開始創建您的第一個考試吧！</p>
+          <a href="{{ url_for('create_exam') }}" class="btn">創建考試</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+
+    function filterExams() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const examItems = document.querySelectorAll('.exam-item');
+      
+      examItems.forEach(item => {
+        const title = item.dataset.title.toLowerCase();
+        const subject = item.dataset.subject.toLowerCase();
+        const status = item.dataset.status;
+        
+        const matchesSearch = title.includes(searchTerm) || subject.includes(searchTerm);
+        const matchesFilter = currentFilter === 'all' || status === currentFilter;
+        
+        if (matchesSearch && matchesFilter) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function filterByStatus(status) {
+      currentFilter = status;
+      
+      // 更新按鈕狀態
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // 篩選考試
+      filterExams();
+    }
+  </script>
+</body>
+</html>
+

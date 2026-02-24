@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全班學習狀況分析 - {{ exam.title }}</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#f8fafc;color:#1f2937;line-height:1.6}
+    .wrap{max-width:1200px;margin:0 auto;padding:20px}
+    .back-link{display:inline-flex;align-items:center;color:#6b7280;text-decoration:none;margin-bottom:20px;font-size:14px}
+    .back-link:hover{color:#374151}
+    .card{background:white;border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+    .card h1{font-size:24px;font-weight:700;margin-bottom:8px;color:#111827}
+    .card h2{font-size:20px;font-weight:600;margin-bottom:16px;color:#374151}
+    .exam-meta{color:#6b7280;margin-bottom:24px;font-size:14px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+    .stat-item{background:#f8fafc;border-radius:8px;padding:20px;text-align:center}
+    .stat-number{font-size:32px;font-weight:700;color:#4f46e5;margin-bottom:4px}
+    .stat-label{color:#6b7280;font-size:14px}
+    .chart-container{position:relative;height:400px;margin-bottom:24px}
+    .chart-container.small{height:300px}
+    .analysis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px}
+    .score-distribution{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:16px}
+    .score-range{background:#f8fafc;border-radius:8px;padding:16px;text-align:center;border-left:4px solid #4f46e5}
+    .score-range.excellent{border-left-color:#10b981}
+    .score-range.good{border-left-color:#3b82f6}
+    .score-range.average{border-left-color:#f59e0b}
+    .score-range.poor{border-left-color:#ef4444}
+    .score-range.fail{border-left-color:#6b7280}
+    .range-label{font-size:14px;color:#6b7280;margin-bottom:4px}
+    .range-count{font-size:24px;font-weight:700;color:#374151}
+    .range-percentage{font-size:12px;color:#6b7280}
+    .insights{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:16px;margin-top:16px}
+    .insights h3{color:#0369a1;margin-bottom:8px;font-size:16px}
+    .insights ul{list-style:none;padding:0}
+    .insights li{margin-bottom:8px;color:#0c4a6e}
+    .insights li:before{content:"💡";margin-right:8px}
+    .btn{display:inline-flex;align-items:center;padding:8px 16px;background:#4f46e5;color:white;text-decoration:none;border-radius:6px;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s}
+    .btn:hover{background:#4338ca}
+    .btn-secondary{background:#6b7280}
+    .btn-secondary:hover{background:#4b5563}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+    .empty-state{text-align:center;padding:40px;color:#6b7280}
+    .empty-state h3{margin:0 0 8px;color:#374151}
+    .empty-state p{margin:0 0 20px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="back-link">← 返回考試詳情</a>
+    
+    <div class="card">
+      <h1>📊 {{ exam.title }} - 全班學習狀況分析</h1>
+      <div class="exam-meta">
+        科目：{{ exam.subject }} | 
+        滿分：{{ exam.max_score }}分 | 
+        分析時間：{{ moment().strftime('%Y-%m-%d %H:%M') if moment else '2025-09-14 20:00' }}
+      </div>
+
+      {% if class_stats %}
+        <!-- 基本統計 -->
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-number">{{ class_stats.total_students }}</div>
+            <div class="stat-label">總人數</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ class_stats.avg_score }}</div>
+            <div class="stat-label">平均分</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ class_stats.max_score }}</div>
+            <div class="stat-label">最高分</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ class_stats.min_score }}</div>
+            <div class="stat-label">最低分</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ class_stats.pass_rate }}%</div>
+            <div class="stat-label">及格率</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ class_stats.std_dev }}</div>
+            <div class="stat-label">標準差</div>
+          </div>
+        </div>
+
+        <!-- 操作按鈕 -->
+        <div class="actions">
+          <a href="{{ url_for('exam_results', exam_id=exam.exam_id) }}" class="btn btn-secondary">查看詳細成績</a>
+          <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="btn btn-secondary">返回考試詳情</a>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if class_stats %}
+      <div class="analysis-grid">
+        <!-- 成績分布圖 -->
+        <div class="card">
+          <h2>📈 成績分布圖</h2>
+          <div class="chart-container">
+            <canvas id="scoreDistributionChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 成績分布統計 -->
+        <div class="card">
+          <h2>📊 成績分布統計</h2>
+          <div class="score-distribution">
+            {% if exam.max_score <= 10 %}
+              <!-- 小分數考試的分布 -->
+              <div class="score-range excellent">
+                <div class="range-label">優秀 ({{ (exam.max_score * 0.9)|round|int }}-{{ exam.max_score }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['優秀'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['優秀'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range good">
+                <div class="range-label">良好 ({{ (exam.max_score * 0.8)|round|int }}-{{ (exam.max_score * 0.9 - 0.1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['良好'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['良好'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range average">
+                <div class="range-label">中等 ({{ (exam.max_score * 0.7)|round|int }}-{{ (exam.max_score * 0.8 - 0.1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['中等'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['中等'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range poor">
+                <div class="range-label">待改進 ({{ (exam.max_score * 0.6)|round|int }}-{{ (exam.max_score * 0.7 - 0.1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['待改進'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['待改進'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range fail">
+                <div class="range-label">需要加強 (0-{{ (exam.max_score * 0.6 - 0.1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['需要加強'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['需要加強'] / class_stats.total_students * 100) }}%</div>
+              </div>
+            {% else %}
+              <!-- 一般滿分考試（以滿分換算實際分數區間顯示） -->
+              <div class="score-range excellent">
+                <div class="range-label">優秀 ({{ (exam.max_score * 0.9)|round|int }}-{{ exam.max_score }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['優秀'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['優秀'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range good">
+                <div class="range-label">良好 ({{ (exam.max_score * 0.8)|round|int }}-{{ (exam.max_score * 0.9 - 1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['良好'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['良好'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range average">
+                <div class="range-label">中等 ({{ (exam.max_score * 0.7)|round|int }}-{{ (exam.max_score * 0.8 - 1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['中等'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['中等'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range poor">
+                <div class="range-label">待改進 ({{ (exam.max_score * 0.6)|round|int }}-{{ (exam.max_score * 0.7 - 1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['待改進'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['待改進'] / class_stats.total_students * 100) }}%</div>
+              </div>
+              <div class="score-range fail">
+                <div class="range-label">需要加強 (0-{{ (exam.max_score * 0.6 - 1)|round|int }})</div>
+                <div class="range-count">{{ class_stats.score_ranges['需要加強'] }}</div>
+                <div class="range-percentage">{{ "%.1f"|format(class_stats.score_ranges['需要加強'] / class_stats.total_students * 100) }}%</div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 成績趨勢圖 -->
+        <div class="card">
+          <h2>📉 成績趨勢分析</h2>
+          <div class="chart-container small">
+            <canvas id="scoreTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 學習洞察 -->
+        <div class="card">
+          <h2>🔍 學習洞察</h2>
+          <div class="insights">
+            <h3>整體表現分析</h3>
+            <ul>
+              {% if class_stats.avg_score >= 80 %}
+                <li>全班平均分數表現優秀，學習效果良好</li>
+              {% elif class_stats.avg_score >= 70 %}
+                <li>全班平均分數中等，有進步空間</li>
+              {% else %}
+                <li>全班平均分數偏低，需要加強學習</li>
+              {% endif %}
+              
+              {% if class_stats.pass_rate >= 80 %}
+                <li>及格率較高，大部分學生掌握基本概念</li>
+              {% elif class_stats.pass_rate >= 60 %}
+                <li>及格率中等，部分學生需要額外輔導</li>
+              {% else %}
+                <li>及格率偏低，建議重新檢視教學內容</li>
+              {% endif %}
+              
+              {% if class_stats.std_dev <= 10 %}
+                <li>成績分布較為集中，學生程度相近</li>
+              {% elif class_stats.std_dev <= 20 %}
+                <li>成績分布適中，存在一定差異</li>
+              {% else %}
+                <li>成績分布較為分散，學生程度差異較大</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 個人學習建議 -->
+      <div class="card">
+        <h2>🎯 個人學習建議</h2>
+        <p style="color: #6b7280; margin-bottom: 16px;">點擊下方按鈕查看每位學生的個人化學習建議</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+          {% for result in grading_results %}
+            <a href="{{ url_for('student_detail', exam_id=exam.exam_id, student_id=result.student_id, result_id=result.result_id) }}" 
+               class="btn" 
+               style="text-decoration: none; justify-content: center;">
+              {{ result.student_id }} ({{ result.final_score }}分)
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div class="card">
+        <div class="empty-state">
+          <h3>還沒有分析數據</h3>
+          <p>請先完成批改流程，然後再查看分析結果</p>
+          <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="btn">返回考試詳情</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if class_stats %}
+  <script>
+    // 成績分布圖
+    const scoreDistributionCtx = document.getElementById('scoreDistributionChart').getContext('2d');
+    
+    // 根據考試滿分動態設置圖表數據
+    {% if exam.max_score <= 10 %}
+      const chartLabels = [
+        '優秀 ({{ (exam.max_score * 0.9)|round|int }}-{{ exam.max_score }})',
+        '良好 ({{ (exam.max_score * 0.8)|round|int }}-{{ (exam.max_score * 0.9 - 0.1)|round|int }})',
+        '中等 ({{ (exam.max_score * 0.7)|round|int }}-{{ (exam.max_score * 0.8 - 0.1)|round|int }})',
+        '待改進 ({{ (exam.max_score * 0.6)|round|int }}-{{ (exam.max_score * 0.7 - 0.1)|round|int }})',
+        '需要加強 (0-{{ (exam.max_score * 0.6 - 0.1)|round|int }})'
+      ];
+      const chartData = [
+        {{ class_stats.score_ranges['優秀'] }},
+        {{ class_stats.score_ranges['良好'] }},
+        {{ class_stats.score_ranges['中等'] }},
+        {{ class_stats.score_ranges['待改進'] }},
+        {{ class_stats.score_ranges['需要加強'] }}
+      ];
+    {% else %}
+      const chartLabels = [
+        '優秀 ({{ (exam.max_score * 0.9)|round|int }}-{{ exam.max_score }})',
+        '良好 ({{ (exam.max_score * 0.8)|round|int }}-{{ (exam.max_score * 0.9 - 1)|round|int }})',
+        '中等 ({{ (exam.max_score * 0.7)|round|int }}-{{ (exam.max_score * 0.8 - 1)|round|int }})',
+        '待改進 ({{ (exam.max_score * 0.6)|round|int }}-{{ (exam.max_score * 0.7 - 1)|round|int }})',
+        '需要加強 (0-{{ (exam.max_score * 0.6 - 1)|round|int }})'
+      ];
+      const chartData = [
+        {{ class_stats.score_ranges['優秀'] }},
+        {{ class_stats.score_ranges['良好'] }},
+        {{ class_stats.score_ranges['中等'] }},
+        {{ class_stats.score_ranges['待改進'] }},
+        {{ class_stats.score_ranges['需要加強'] }}
+      ];
+    {% endif %}
+    
+    new Chart(scoreDistributionCtx, {
+      type: 'doughnut',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          data: chartData,
+          backgroundColor: [
+            '#10b981',
+            '#3b82f6',
+            '#f59e0b',
+            '#ef4444',
+            '#6b7280'
+          ],
+          borderWidth: 2,
+          borderColor: '#ffffff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 20,
+              usePointStyle: true
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const total = {{ class_stats.total_students }};
+                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                return context.label + ': ' + context.parsed + '人 (' + percentage + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // 成績趨勢圖（直方圖）
+    const scoreTrendCtx = document.getElementById('scoreTrendChart').getContext('2d');
+    const scores = {{ class_stats.scores | tojson }};
+    const maxScore = {{ exam.max_score }};
+    
+    // 根據考試滿分動態創建分組數據
+    const bins = [];
+    const binLabels = [];
+    
+    {% if exam.max_score <= 10 %}
+      // 小分數考試：每個分數一個區間
+      for (let i = 0; i <= maxScore; i++) {
+        const count = scores.filter(score => score === i).length;
+        bins.push(count);
+        binLabels.push(i.toString());
+      }
+    {% else %}
+      // 一般滿分考試：以滿分的 10% 為一個區間
+      const binSize = Math.max(1, Math.floor(maxScore / 10));
+      for (let i = 0; i <= maxScore; i += binSize) {
+        const binStart = i;
+        const binEnd = Math.min(maxScore, i + binSize - 1);
+        const count = scores.filter(score => score >= binStart && score <= binEnd).length;
+        bins.push(count);
+        binLabels.push(binStart + '-' + binEnd);
+      }
+    {% endif %}
+    
+    new Chart(scoreTrendCtx, {
+      type: 'bar',
+      data: {
+        labels: binLabels,
+        datasets: [{
+          label: '人數',
+          data: bins,
+          backgroundColor: '#4f46e5',
+          borderColor: '#4338ca',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          },
+          x: {
+            {% if exam.max_score <= 10 %}
+            title: {
+              display: true,
+              text: '分數'
+            }
+            {% else %}
+            title: {
+              display: true,
+              text: '分數區間'
+            }
+            {% endif %}
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  </script>
+  {% endif %}
+</body>
+</html>

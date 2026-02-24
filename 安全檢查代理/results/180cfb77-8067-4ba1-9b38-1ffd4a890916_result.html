@@ -1,0 +1,293 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>協作型評分結果 - 180cfb77-8067-4ba1-9b38-1ffd4a890916</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .experts-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin: 20px 0;
+            }
+            .expert-card {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                border-left: 4px solid #667eea;
+            }
+            .expert-card.gpt4 {
+                border-left-color: #0066cc;
+            }
+            .expert-card.claude {
+                border-left-color: #8b5cf6;
+            }
+            .expert-card .score-display {
+                font-size: 1.5em;
+                padding: 10px;
+                margin: 10px 0;
+                border: 2px solid currentColor;
+            }
+            .score-analysis {
+                background: #e9ecef;
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+            .consensus {
+                color: #28a745;
+                font-weight: bold;
+            }
+            .arbitration {
+                color: #ffc107;
+                font-weight: bold;
+            }
+            .discussion-views {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .view-card {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                border-left: 3px solid #667eea;
+            }
+            .security-warning {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                padding: 20px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                color: #856404;
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🤖 協作型生成式AI代理人評分系統</h1>
+            <h2>✅ 專家共識</h2>
+            <p><strong>任務ID:</strong> 180cfb77-8067-4ba1-9b38-1ffd4a890916</p>
+            <p><strong>考試檔案:</strong> question.txt</p>
+            <p><strong>學生答案:</strong> answer.txt</p>
+            <p><small>兩位專家評分一致</small></p>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 最終評分結果</h2>
+            <div class="score-display">
+                最終得分: 2.0 / 100 分 (2.0%)
+            </div>
+            <div class="method-info">
+                <p><strong>評分方式：</strong> 兩位專家評分一致</p>
+                <p><strong>處理狀態：</strong> ✅ 安全</p>
+            </div>
+        </div>
+        
+        
+        <div class="result-section">
+            <h2>🤖 專家評分詳情</h2>
+            <div class="experts-grid">
+                <div class="expert-card gpt4">
+                    <h3>🔹 GPT-4 專家</h3>
+                    <div class="score-display">0.0 分</div>
+                    <p>專長：邏輯分析與結構評估</p>
+                </div>
+                <div class="expert-card claude">
+                    <h3>🔸 Claude 專家</h3>
+                    <div class="score-display">4.0 分</div>
+                    <p>專長：細緻分析與教學回饋</p>
+                </div>
+            </div>
+            <div class="score-analysis">
+                <p><strong>分數差異：</strong> 4.0 分 (4.0%)</p>
+                <p class="consensus">✅ 差異在可接受範圍內，達成共識</p>
+            </div>
+        </div>
+        
+        
+        
+        
+        <div class="result-section">
+            <h2>📝 完整評分報告</h2>
+            <div class="reasoning-content">
+# 協作型評分系統報告 - 共識達成
+
+## 📊 評分結果
+**最終得分：2.0 分**
+
+### 🤖 代理評分詳情
+**GPT-4 專家評分：** 0分
+**Claude 專家評分：** 4.0分
+**分數差異：** 4.0分
+
+### ✅ 共識達成
+兩位專家評分差異在可接受範圍內（≤5%），無需仲裁介入。
+
+### 📝 GPT-4 專家意見
+批改失敗: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}...
+
+### 📝 Claude 專家意見  
+讓我根據評分標準來評估這份作業：
+
+## 1. 逐題分析
+
+題目要求：
+- 使用for迴圈
+- 顯示"我喜歡程式設計"50次
+- 使用count作為計數器變數
+- 使用MessageBox來顯示
+
+學生答案分析：
+✓ 正確使用for迴圈
+✓ 正確使用count作為計數器
+✓ 正確設定迴圈次數(1到50)
+✓ 正確使用MessageBox.Show()顯示訊息
+✓ 正確顯示指定文字
+
+## 2. 得分說明
+
+滿分4分，學生答案完全符合要求，獲得全部4分。
+
+得分細項：
+- 迴圈語法正確 (1分)
+- 計數器使用正確 (1分)
+- MessageBox使用正確 (1分)
+- 顯示內容與次數正確 (1分)
+
+## 3. 改進建議
+
+雖然程式完全正確，但可以提供以下優化建議：
+1. 考慮加入\n換行符號，讓訊息更容易閱讀
+2. 可以在訊息中加入當前是第幾次，例如：
+```csharp
+MessageBox.Show($"第{count}次：我喜歡程式設計");
+```
+3. 考慮使用StringBuilder或其他更有效率的方式，避免重複彈出對話框造成使用者困擾
+
+## 4. 總分統計
+
+本題...
+
+---
+**評分方式：** 專家共識
+**完成時間：** 2025-07-27 16:03:01
+</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-27 16:03:01</p>
+            <p>🤖 協作型生成式AI代理人評分系統</p>
+            <p>📋 基於論文研究設計的多代理協作架構</p>
+            <p>🔒 集成安全檢查與智能仲裁機制</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '協作型評分報告_180cfb77-8067-4ba1-9b38-1ffd4a890916.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

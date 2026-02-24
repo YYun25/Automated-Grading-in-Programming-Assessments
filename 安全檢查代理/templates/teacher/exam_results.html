@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{{ exam.title }} - 考試結果</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:1200px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-bottom:24px}
+    h1{margin:0 0 8px;font-size:24px;color:#1f2937}
+    .exam-meta{color:#6b7280;margin-bottom:20px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
+    .stat-item{background:#f8fafc;border-radius:8px;padding:16px;text-align:center}
+    .stat-number{font-size:24px;font-weight:700;color:#4f46e5;margin:0}
+    .stat-label{color:#6b7280;font-size:12px;margin:4px 0 0}
+    .btn{display:inline-block;background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:500;margin-right:8px;margin-bottom:8px}
+    .btn:hover{background:#4338ca}
+    .btn-success{background:#10b981}
+    .btn-success:hover{background:#059669}
+    .btn-secondary{background:#6b7280}
+    .btn-secondary:hover{background:#4b5563}
+    .back-link{display:inline-block;margin-bottom:20px;color:#4f46e5;text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .results-table{width:100%;border-collapse:collapse;margin-top:20px}
+    .results-table th,.results-table td{border:1px solid #e5e7eb;padding:12px;text-align:left}
+    .results-table thead{background:#f8fafc}
+    .results-table th{font-weight:600;color:#374151}
+    .results-table tr:nth-child(even){background:#f9fafb}
+    .results-table tr:hover{background:#f3f4f6}
+    .score{font-weight:600}
+    .score-high{color:#10b981}
+    .score-medium{color:#f59e0b}
+    .score-low{color:#ef4444}
+    .empty-state{text-align:center;padding:40px;color:#6b7280}
+    .empty-state h3{margin:0 0 8px;color:#374151}
+    .empty-state p{margin:0 0 20px}
+    .grade-distribution{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+    .grade-range{background:#f8fafc;border-radius:8px;padding:16px;text-align:center}
+    .grade-range h4{margin:0 0 8px;color:#374151}
+    .grade-count{font-size:24px;font-weight:700;color:#4f46e5}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="back-link">← 返回考試詳情</a>
+    
+    <div class="card">
+      <h1>📊 {{ exam.title }} - 考試結果</h1>
+      <div class="exam-meta">
+        科目：{{ exam.subject }} | 
+        滿分：{{ exam.max_score }}分 | 
+        批改完成時間：{{ grading_results[0].graded_at.strftime('%Y-%m-%d %H:%M') if grading_results else '未完成' }}
+      </div>
+
+      <!-- 統計資訊 -->
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">{{ grading_results|length }}</div>
+          <div class="stat-label">總人數</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ "%.1f"|format(avg_score) }}</div>
+          <div class="stat-label">平均分</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ max_score }}</div>
+          <div class="stat-label">最高分</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ min_score }}</div>
+          <div class="stat-label">最低分</div>
+        </div>
+      </div>
+
+      <!-- 操作按鈕 -->
+      <div class="actions">
+        <a href="{{ url_for('class_analysis', exam_id=exam.exam_id) }}" class="btn">📊 全班分析</a>
+        <a href="{{ url_for('export_results', exam_id=exam.exam_id) }}" class="btn btn-success">📥 匯出Excel</a>
+        <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="btn btn-secondary">返回詳情</a>
+      </div>
+
+      <!-- 成績分布 -->
+      {% if grading_results %}
+        <div class="grade-distribution">
+          {% if exam.max_score <= 10 %}
+            <!-- 小分數考試的分布 -->
+            <div class="grade-range">
+              <h4>優秀 ({{ (exam.max_score * 0.9)|round|int }}-{{ exam.max_score }})</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', (exam.max_score * 0.9)|round|int)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>良好 ({{ (exam.max_score * 0.8)|round|int }}-{{ (exam.max_score * 0.9 - 0.1)|round|int }})</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', (exam.max_score * 0.8)|round|int)|selectattr('final_score', 'lt', (exam.max_score * 0.9)|round|int)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>中等 ({{ (exam.max_score * 0.7)|round|int }}-{{ (exam.max_score * 0.8 - 0.1)|round|int }})</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', (exam.max_score * 0.7)|round|int)|selectattr('final_score', 'lt', (exam.max_score * 0.8)|round|int)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>待改進 ({{ (exam.max_score * 0.6)|round|int }}-{{ (exam.max_score * 0.7 - 0.1)|round|int }})</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', (exam.max_score * 0.6)|round|int)|selectattr('final_score', 'lt', (exam.max_score * 0.7)|round|int)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>需要加強 (0-{{ (exam.max_score * 0.6 - 0.1)|round|int }})</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'lt', (exam.max_score * 0.6)|round|int)|list|length }}</div>
+            </div>
+          {% else %}
+            <!-- 標準100分制考試的分布 -->
+            <div class="grade-range">
+              <h4>90-100分</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', 90)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>80-89分</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', 80)|selectattr('final_score', 'lt', 90)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>70-79分</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', 70)|selectattr('final_score', 'lt', 80)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>60-69分</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'ge', 60)|selectattr('final_score', 'lt', 70)|list|length }}</div>
+            </div>
+            <div class="grade-range">
+              <h4>60分以下</h4>
+              <div class="grade-count">{{ grading_results|selectattr('final_score', 'lt', 60)|list|length }}</div>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- 詳細結果表格 -->
+    <div class="card">
+      <h2>詳細成績</h2>
+      {% if grading_results %}
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>學生ID</th>
+              <th>GPT分數</th>
+              <th>Claude分數</th>
+              <th>最終分數</th>
+              <th>批改時間</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for result in grading_results %}
+              <tr>
+                <td>{{ result.student_id }}</td>
+                <td class="score">{{ result.gpt_score }}</td>
+                <td class="score">{{ result.claude_score }}</td>
+                <td class="score {% if result.final_score >= 80 %}score-high{% elif result.final_score >= 60 %}score-medium{% else %}score-low{% endif %}">
+                  {{ result.final_score }}
+                </td>
+                <td>{{ result.graded_at.strftime('%m-%d %H:%M') }}</td>
+                <td>
+                  <a href="{{ url_for('student_detail', exam_id=exam.exam_id, student_id=result.student_id, result_id=result.result_id) }}" class="btn btn-sm">查看詳情</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty-state">
+          <h3>還沒有批改結果</h3>
+          <p>請先完成批改流程</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- 詳情模態框 -->
+  <div id="detailModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:800px;max-height:80vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h3>批改詳情</h3>
+        <button onclick="closeDetail()" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button>
+      </div>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <script>
+    function showDetail(resultId) {
+      // 這裡可以通過AJAX獲取詳細的批改結果
+      // 為了簡化，我們顯示一個基本的詳情
+      const modal = document.getElementById('detailModal');
+      const content = document.getElementById('detailContent');
+      
+      content.innerHTML = `
+        <div style="margin-bottom:16px">
+          <h4>GPT批改結果</h4>
+          <p>分數：${resultId}</p>
+        </div>
+        <div style="margin-bottom:16px">
+          <h4>Claude批改結果</h4>
+          <p>分數：${resultId}</p>
+        </div>
+        <div>
+          <h4>最終結果</h4>
+          <p>分數：${resultId}</p>
+        </div>
+      `;
+      
+      modal.style.display = 'block';
+    }
+
+    function closeDetail() {
+      document.getElementById('detailModal').style.display = 'none';
+    }
+
+    // 點擊模態框外部關閉
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target.id === 'detailModal') {
+        closeDetail();
+      }
+    });
+  </script>
+</body>
+</html>
+

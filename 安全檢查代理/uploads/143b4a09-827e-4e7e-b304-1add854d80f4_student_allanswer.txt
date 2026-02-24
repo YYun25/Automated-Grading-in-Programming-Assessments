@@ -1,0 +1,326 @@
+# C# 程式設計考卷完整解答
+
+## Q1：(2分) 問答題
+**題目：** 以下程式碼執行後，wholePieces變數將包含什麼值？
+```csharp
+double totalPieces = 6.5;
+int wholePieces = (int)totalPieces;
+```
+
+**答案：** `6`
+
+**解釋：** (int)強制轉型會截斷小數部分，只保留整數部分，所以6.5轉為int後變成6。
+
+---
+
+## Q2：(4分) 題組
+**題目：** 使用組合指定運算子重寫以下語句：
+
+**答案：**
+- a. `count += 1;`
+- b. `amount -= 5;`
+- c. `radius *= 10;`
+- d. `length /= 2;`
+
+---
+
+## Q3：(4分) 撰寫程式
+**題目：** 為計算兩個整數之和並顯示結果的應用程式編寫一個try-catch語句。
+
+**答案：**
+```csharp
+try
+{
+    int value1 = int.Parse(value1TextBox.Text);
+    int value2 = int.Parse(value2TextBox.Text);
+    int sum = value1 + value2;
+    sumLabel.Text = sum.ToString();
+}
+catch (Exception ex)
+{
+    MessageBox.Show("輸入錯誤：" + ex.Message);
+}
+```
+
+---
+
+## Q4：(2分) 問答題
+**題目：** 寫出程式敘述，使用Math.Pow方法將數字12的5次方，並將結果儲存在名為product的double型態變數中。
+
+**答案：**
+```csharp
+double product = Math.Pow(12, 5);
+```
+
+---
+
+## Q5：(5分) 撰寫程式
+**題目：** 撰寫一個if-else陳述式，檢查變數year是否為閏年，並顯示適當的訊息。
+
+**答案：**
+```csharp
+if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+{
+    MessageBox.Show(year + "年是閏年");
+}
+else
+{
+    MessageBox.Show(year + "年不是閏年");
+}
+```
+
+---
+
+## Q6：(5分) 撰寫程式
+**題目：** 撰寫一個使用TryParse方法的if-else陳述式，將tempTextBox控制項的Text屬性轉換為double。
+
+**答案：**
+```csharp
+double temperature;
+if (double.TryParse(tempTextBox.Text, out temperature))
+{
+    MessageBox.Show("溫度值：" + temperature.ToString());
+}
+else
+{
+    MessageBox.Show("輸入格式錯誤，請輸入有效的數字");
+}
+```
+
+---
+
+## Q7：(5分) 撰寫程式
+**題目：** 撰寫程式碼以讀取ListBox中被選取的項目，確保在沒有選取任何項目時不會發生例外狀況。
+
+**答案：**
+```csharp
+if (nameListBox.SelectedIndex != -1)
+{
+    string selectedItem = nameListBox.SelectedItem.ToString();
+    MessageBox.Show("選取的項目：" + selectedItem);
+}
+else
+{
+    MessageBox.Show("沒有選取任何項目");
+}
+```
+
+---
+
+## Q8：(2分) 問答題
+**題目：** 以下程式碼示例將顯示哪些訊息？
+```csharp
+int number = 5;
+MessageBox.Show((number++).ToString());
+MessageBox.Show((--number).ToString());
+```
+
+**答案：**
+- 第一個MessageBox顯示：`5`
+- 第二個MessageBox顯示：`5`
+
+**解釋：** 
+- number++是後置遞增，先使用值(5)再遞增，所以顯示5，number變為6
+- --number是前置遞減，先遞減再使用值，number從6變為5，所以顯示5
+
+---
+
+## Q9：(4分) 撰寫程式
+**題目：** 寫一個for迴圈，顯示"我喜歡程式設計"50次。
+
+**答案：**
+```csharp
+for (int count = 1; count <= 50; count++)
+{
+    MessageBox.Show("我喜歡程式設計");
+}
+```
+
+---
+
+## Q10：(2分) 問答題
+**題目：** 以下迴圈將迭代多少次？
+```csharp
+int count = 0;
+do {
+    MessageBox.Show(count.ToString());
+    count++;
+}
+while (count < 0);
+```
+
+**答案：** `1次`
+
+**解釋：** do-while迴圈至少執行一次，第一次執行後count變為1，條件count < 0為false，所以迴圈結束。
+
+---
+
+## Q11：(6分) 問答題
+**題目：** 寫出以下程式執行結果(以新台幣為單位)
+
+**答案：** `NT$12,700.00`
+
+**解釋：** 程式讀取Sales.txt檔案中的所有數值並加總：
+1000.0 + 1200.0 + 1800.0 + 1500.0 + 2100.0 + 2500.0 + 2000.0 + 1600.0 = 12700.0
+使用ToString("C")格式化為貨幣格式。
+
+---
+
+## Q12：(4分) 題組
+**答案：**
+- A. `inputFile = File.OpenText("Sales.txt");`
+- B. `sales = decimal.Parse(inputFile.ReadLine());`
+- C. `while (!inputFile.EndOfStream)`
+- D. `inputFile.Close();`
+
+---
+
+## Q13：(5分) 撰寫程式
+**題目：** 編寫建立random物件的程式碼，然後產生100到399範圍內的隨機整數。
+
+**答案：**
+```csharp
+Random random = new Random();
+int randomNumber = random.Next(100, 400);
+```
+
+**說明：** Next(100, 400)產生100到399的隨機整數（包含100，不包含400）。
+
+---
+
+## Q14：(10分) 撰寫程式
+**題目：** 編寫程式碼讀取rainfall.txt檔案並在ListBox中顯示內容，同時計算月降雨總量。
+
+**答案：**
+```csharp
+try
+{
+    StreamReader reader = File.OpenText("rainfall.txt");
+    double totalRainfall = 0;
+    
+    rainfallListBox.Items.Clear();
+    
+    while (!reader.EndOfStream)
+    {
+        string line = reader.ReadLine();
+        rainfallListBox.Items.Add(line);
+        double rainfall = double.Parse(line);
+        totalRainfall += rainfall;
+    }
+    
+    reader.Close();
+    totalRainFallLabel.Text = "月降雨總量：" + totalRainfall.ToString();
+}
+catch (Exception ex)
+{
+    MessageBox.Show("讀取檔案錯誤：" + ex.Message);
+}
+```
+
+---
+
+## Q15：(10分) 撰寫程式
+**題目：** 利用迴圈找出1~999內所有3的倍數，並將結果寫入檔案中。
+
+**答案：**
+```csharp
+try
+{
+    StreamWriter writer = File.CreateText("multiples_of_three.txt");
+    
+    for (int i = 1; i <= 999; i++)
+    {
+        if (i % 3 == 0)
+        {
+            writer.WriteLine(i);
+        }
+    }
+    
+    writer.Close();
+    MessageBox.Show("檔案寫入完成");
+}
+catch (Exception ex)
+{
+    MessageBox.Show("檔案寫入錯誤：" + ex.Message);
+}
+```
+
+---
+
+## Q16：(10分) 撰寫程式
+**題目：** 寫出方法IsAuthorizedUser，接收兩個字串變數為參數，驗證帳號密碼。
+
+**答案：**
+```csharp
+const string ACCOUNT = "admin";
+const string PASSWORD = "1234";
+
+private bool IsAuthorizedUser(string userName, string passwd)
+{
+    if (userName == ACCOUNT && passwd == PASSWORD)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+```
+
+---
+
+## Q17：(10分) 問答題
+**題目：** 請問以下程式執行結果
+
+**答案：**
+1. `The value of number is 99`
+2. `In ChangeMe, myValue is 0`
+3. `The value of number is 99`
+
+**解釋：** C#中整數是按值傳遞，ChangeMe方法中的myValue是number的副本，修改myValue不會影響原始的number變數。
+
+---
+
+## Q18：(10分) 問答題
+**題目：** 請先修改程式錯誤，再寫下程式執行結果
+
+**修正後的程式：**
+```csharp
+private void SetToZero(out int number)
+{
+    number = 0;
+}
+
+private void goButton_Click(object sender, EventArgs e)
+{
+    int x = 99, y = 100, z = 101;
+
+    outputListBox.Items.Clear();
+    outputListBox.Items.Add("x is set to " + x);
+    outputListBox.Items.Add("y is set to " + y);
+    outputListBox.Items.Add("z is set to " + z);
+
+    SetToZero(out x);  // 改為out
+    SetToZero(out y);  // 改為out
+    SetToZero(out z);  // 改為out
+
+    outputListBox.Items.Add("##########");
+    outputListBox.Items.Add("x is set to " + x);
+    outputListBox.Items.Add("y is set to " + y);
+    outputListBox.Items.Add("z is set to " + z);
+}
+```
+
+**執行結果：**
+```
+x is set to 99
+y is set to 100
+z is set to 101
+##########
+x is set to 0
+y is set to 0
+z is set to 0
+```
+
+**錯誤說明：** 原程式中SetToZero方法使用out參數，但呼叫時使用ref，應該統一使用out關鍵字。

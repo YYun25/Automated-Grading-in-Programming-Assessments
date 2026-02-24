@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>上傳學生答案 - {{ exam.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:800px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:32px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    h1{margin:0 0 24px;font-size:24px;color:#1f2937}
+    .exam-info{background:#f8fafc;border-radius:8px;padding:16px;margin-bottom:24px}
+    .exam-title{font-size:18px;font-weight:600;color:#1f2937;margin:0 0 8px}
+    .exam-meta{color:#6b7280;font-size:14px}
+    .form-group{margin-bottom:20px}
+    label{display:block;font-weight:600;color:#374151;margin-bottom:8px}
+    input[type=file]{width:100%;padding:20px;border:2px dashed #d1d5db;border-radius:8px;background:#f9fafb;text-align:center}
+    .btn{display:inline-block;background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:12px 24px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:500}
+    .btn:hover{background:#4338ca}
+    .btn-secondary{background:#6b7280}
+    .btn-secondary:hover{background:#4b5563}
+    .form-actions{display:flex;gap:12px;margin-top:24px}
+    .help-text{color:#6b7280;font-size:12px;margin-top:4px}
+    .back-link{display:inline-block;margin-bottom:20px;color:#4f46e5;text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .upload-area{border:2px dashed #d1d5db;border-radius:8px;padding:40px;text-align:center;background:#f9fafb;margin-bottom:20px}
+    .upload-area.dragover{border-color:#4f46e5;background:#eff6ff}
+    .upload-icon{font-size:48px;color:#9ca3af;margin-bottom:16px}
+    .upload-text{color:#6b7280;margin-bottom:16px}
+    .file-list{margin-top:20px}
+    .file-item{background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+    .file-name{font-weight:500;color:#374151}
+    .file-size{color:#6b7280;font-size:12px}
+    .remove-file{color:#dc2626;cursor:pointer;font-size:12px}
+    .remove-file:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="back-link">← 返回考試詳情</a>
+    
+    <div class="card">
+      <h1>📁 上傳學生答案</h1>
+      
+      <div class="exam-info">
+        <div class="exam-title">{{ exam.title }}</div>
+        <div class="exam-meta">
+          科目：{{ exam.subject }} | 
+          狀態：{{ exam.status }} | 
+          滿分：{{ exam.max_score }}分
+        </div>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div style="margin-bottom:20px">
+          {% for cat, msg in messages %}
+            <div style="padding:12px 16px;background:{% if cat=='error' %}#fef2f2;color:#dc2626;border-left:4px solid #dc2626{% else %}#f0fdf4;color:#16a34a;border-left:4px solid #16a34a{% endif %};border-radius:8px;margin-bottom:8px">
+              {{ msg }}
+            </div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" enctype="multipart/form-data" id="uploadForm">
+        <div class="form-group">
+          <label>選擇學生答案檔案</label>
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">
+              拖拽檔案到此處，或點擊選擇檔案<br>
+              <small>支援格式：TXT、PDF、DOCX</small>
+            </div>
+            <input type="file" id="fileInput" name="answer_files" multiple accept=".txt,.pdf,.docx" style="display:none">
+            <button type="button" class="btn" id="selectFileBtn">選擇檔案</button>
+          </div>
+          <div class="help-text">
+            建議檔案命名格式：學生ID_姓名.副檔名（例如：A123456_張三.txt）<br>
+            可以一次選擇多個檔案進行批量上傳
+          </div>
+        </div>
+
+        <div id="fileList" class="file-list" style="display:none;">
+          <h3>已選擇的檔案：</h3>
+          <div id="fileItems"></div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">上傳檔案</button>
+          <a href="{{ url_for('exam_detail', exam_id=exam.exam_id) }}" class="btn btn-secondary">取消</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const fileItems = document.getElementById('fileItems');
+    let selectedFiles = [];
+
+    // 拖拽功能
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const files = Array.from(e.dataTransfer.files);
+      addFiles(files);
+    });
+
+    // 按鈕點擊事件
+    document.getElementById('selectFileBtn').addEventListener('click', (e) => {
+      e.stopPropagation(); // 防止事件冒泡
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      addFiles(files);
+    });
+
+    function addFiles(files) {
+      files.forEach(file => {
+        // 檢查檔案格式
+        const allowedTypes = ['.txt', '.pdf', '.docx'];
+        const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+        
+        if (allowedTypes.includes(fileExt)) {
+          selectedFiles.push(file);
+        } else {
+          alert(`檔案 ${file.name} 格式不支援，請選擇 TXT、PDF 或 DOCX 檔案。`);
+        }
+      });
+      
+      updateFileList();
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      updateFileList();
+    }
+
+    function updateFileList() {
+      if (selectedFiles.length > 0) {
+        fileList.style.display = 'block';
+        fileItems.innerHTML = selectedFiles.map((file, index) => `
+          <div class="file-item">
+            <div>
+              <div class="file-name">${file.name}</div>
+              <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
+            </div>
+            <span class="remove-file" onclick="removeFile(${index})">移除</span>
+          </div>
+        `).join('');
+      } else {
+        fileList.style.display = 'none';
+      }
+    }
+
+    // 表單提交
+    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+      if (selectedFiles.length === 0) {
+        e.preventDefault();
+        alert('請至少選擇一個檔案');
+        return;
+      }
+
+      // 創建新的 FormData 並添加選中的檔案
+      const formData = new FormData();
+      selectedFiles.forEach(file => {
+        formData.append('answer_files', file);
+      });
+
+      // 使用 fetch 提交
+      e.preventDefault();
+      
+      fetch('{{ url_for("upload_answers", exam_id=exam.exam_id) }}', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '{{ url_for("exam_detail", exam_id=exam.exam_id) }}';
+        } else {
+          alert('上傳失敗，請重試');
+        }
+      })
+      .catch(error => {
+        alert('上傳過程中發生錯誤：' + error);
+      });
+    });
+  </script>
+</body>
+</html>
+

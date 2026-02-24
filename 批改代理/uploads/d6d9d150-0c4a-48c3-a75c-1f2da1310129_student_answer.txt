@@ -1,0 +1,4 @@
+for (int count = 1; count <= 50; count++)
+{
+    MessageBox.Show("我喜歡程式設計");
+}

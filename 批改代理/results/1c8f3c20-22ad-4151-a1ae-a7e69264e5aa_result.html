@@ -1,0 +1,232 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>批改結果 - 1c8f3c20-22ad-4151-a1ae-a7e69264e5aa</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .method-badge {
+                background: #6c757d;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                display: inline-block;
+                margin: 10px 0;
+            }
+            .security-warning {
+                background: #dc3545;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #721c24;
+            }
+            .agent-details {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #007bff;
+            }
+            .score-comparison {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .agent-score, .score-diff {
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📋 程式批改結果</h1>
+            <p><strong>任務ID:</strong> 1c8f3c20-22ad-4151-a1ae-a7e69264e5aa</p>
+            <p><strong>考試檔案:</strong> Questions.txt</p>
+            <p><strong>學生答案:</strong> A111222207廖呈紘.pdf</p>
+            <div class="method-badge">🤖 單代理人批改</div>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 評分結果</h2>
+            <div class="score-display">
+                最終得分: 13.0 分
+            </div>
+            
+            
+        </div>
+        
+        <div class="result-section">
+            <h2>📝 詳細批改報告</h2>
+            <div class="reasoning-content">### 評分
+
+#### 問答題批改
+Q1: 錯誤。應為6，因為(int)totalPieces會將totalPieces轉換為整數，小數部分會被捨去。得分：0/2
+
+Q4: 錯誤。應為`double product = Math.Pow(12, 5);`。得分：0/2
+
+Q8: 錯誤。應為5和5，因為number++會在顯示後增加，而--number會在顯示前減少。得分：0/2
+
+Q10: 錯誤。應為0次，因為條件count < 0在第一次迭代時就不成立。得分：0/2
+
+Q11: 正確。得分：6/6
+
+Q17: 錯誤。應為"The value of number is 99"，"In ChangeMe, myValue is 0"，"The value of number is 99"。得分：0/10
+
+Q18: 錯誤。應為"x is set to 0"，"y is set to 0"，"z is set to 0"。得分：0/10
+
+#### 題組批改
+Q2: 錯誤。應為a. count += 1; b. amount -= 5; c. radius *= 10; d. length /= 2;。得分：0/4
+
+Q12: 部分正確。C部分未回答。得分：3/4
+
+#### 撰寫程式批改
+Q3: 錯誤。應該使用try-catch來捕捉可能的例外，並在try區塊中進行數字的加總和顯示。得分：0/4
+
+Q5: 未回答。得分：0/5
+
+Q6: 錯誤。應該使用double.TryParse方法來嘗試將文字轉換為double，並根據轉換是否成功來決定顯示的訊息。得分：0/5
+
+Q7: 錯誤。應該使用if語句來檢查是否有選取項目，並在有選取項目的情況下讀取選取的項目。得分：0/5
+
+Q9: 正確。得分：4/4
+
+Q13: 未回答。得分：0/5
+
+Q14: 錯誤。應該在while迴圈中讀取檔案的每一行，並將其添加到ListBox中，並將其轉換為double並加到總量中。得分：0/5
+
+Q15: 未回答。得分：0/10
+
+Q16: 錯誤。應該使用==來比較字串是否相等，並使用&&來結合兩個條件。得分：0/10
+
+Q13: 未回答。得分：0/5
+
+Q14: 錯誤。應該在while迴圈中讀取檔案的每一行，並將其添加到ListBox中，並將其轉換為double並加到總量中。得分：0/5
+
+Q15: 未回答。得分：0/10
+
+Q16: 錯誤。應該使用==來比較字串是否相等，並使用&&來結合兩個條件。得分：0/10
+
+### 總分：13/100分
+
+### 回饋
+你的答案在很多問題上都有誤解，建議你再回去複習一下課程內容，特別是關於程式碼的部分。你需要理解每個語句的作用，並能夠正確地使用它們來解決問題。在寫程式的時候，要注意語法的正確性，並確保你的程式能夠正確地執行。在回答問答題的時候，要確保你的答案是準確且完整的。希望你能從這次的考試中學到一些東西，並在下次的考試中有所進步。</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-08 17:26:26</p>
+            <p>多代理人程式批改系統 © 2025</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '批改報告_1c8f3c20-22ad-4151-a1ae-a7e69264e5aa.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

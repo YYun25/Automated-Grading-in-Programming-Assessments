@@ -1,0 +1,34 @@
+Q7:
+string selected = nameListBox.SelectedItem.ToString();
+MessageBox.Show(selected);
+
+Q9:
+for (int count = 0; ; count++)
+{
+    Console.WriteLine("我喜歡程式設計");
+}
+
+Q15:
+StreamWriter writer = new StreamWriter("multiples_of_three.txt");
+for (int i = 0; i < 999; i++)
+{
+    if (i % 3 == 0)
+    {
+        writer.WriteLine(i);
+    }
+}
+
+Q16:
+bool IsAuthorizedUser(string userName, string passwd)
+{
+    return true;
+}
+
+Q18:
+x is set to 99
+y is set to 100
+z is set to 101
+##########
+x is set to 0
+y is set to 0
+z is set to 0

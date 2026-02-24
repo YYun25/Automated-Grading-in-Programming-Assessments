@@ -1,0 +1,357 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>批改結果 - 4a0a514f-cf9c-479a-ae12-564383443f4d</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .method-badge {
+                background: #6c757d;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                display: inline-block;
+                margin: 10px 0;
+            }
+            .security-warning {
+                background: #dc3545;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #721c24;
+            }
+            .agent-details {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #007bff;
+            }
+            .score-comparison {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .agent-score, .score-diff {
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📋 程式批改結果</h1>
+            <p><strong>任務ID:</strong> 4a0a514f-cf9c-479a-ae12-564383443f4d</p>
+            <p><strong>考試檔案:</strong> Questions.txt</p>
+            <p><strong>學生答案:</strong> A111222207廖呈紘.pdf</p>
+            <div class="method-badge">🤝 多代理人協作批改 (GPT-4 + Claude-3.5-Sonnet)</div>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 評分結果</h2>
+            <div class="score-display">
+                最終得分: 35.0 分
+            </div>
+            
+            
+        <div class="agent-details">
+            <h3>📊 代理人評分詳情</h3>
+            <div class="score-comparison">
+                <div class="agent-score">
+                    <strong>GPT-4 專家：</strong> 28.0分
+                </div>
+                <div class="agent-score">
+                    <strong>Claude-3.5-Sonnet 專家：</strong> 35.0分
+                </div>
+                <div class="score-diff">
+                    <strong>分數差異：</strong> 7.0分
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        
+        <div class="result-section">
+            <h2>📝 詳細批改報告</h2>
+            <div class="reasoning-content">
+# 多代理人協作批改報告
+
+## 評分結果
+**最終得分：35.0分**
+
+## GPT-4 專家評分：28.0分
+## 評分結果
+
+### Q1: (2分)
+答案錯誤。應該是6，因為(int)totalPieces會將6.5轉換為整數，小數部分將被捨去。得分：0分
+
+### Q2: (4分)
+答案錯誤。應該使用組合指定運算子重寫語句，正確答案為：
+a. count += 1;
+b. amount -= 5;
+c. radius *= 10;
+d. length /= 2;
+得分：0分
+
+### Q3: (4分)
+答案錯誤。應該使用try-catch語句來處理可能的例外，並使用int.Parse或int.TryParse來轉換TextBox的Text屬性。得分：0分
+
+### Q4: (2分)
+答案錯誤。應該使用Math.Pow方法來計算12的5次方，並將結果儲存在名為product的double型態變數中。得分：0分
+
+### Q5: (5分)
+答案未提供。得分：0分
+
+### Q6: (5分)
+答案錯誤。應該使用double.TryParse方法來嘗試將tempTextBox的Text屬性轉換為double，並將結果儲存在temperature變數中。得分：0分
+
+### Q7: (5分)
+答案錯誤。應該使用nameListBox.SelectedItem屬性來獲取被選取的項目，並檢查是否為null以防止例外狀況。得分：0分
+
+### Q8: (2分)
+答案錯誤。應該是6和5。因為number++會在返回值之後增加1，而--number會在返回值之前減少1。得分：0分
+
+### Q9: (4分)
+答案正確。得分：4分
+
+### Q10: (2分)
+答案錯誤。應該是0次，因為在第一次檢查條件時，count已經不小於0了。得分：0分
+
+### Q11: (6分)
+答案正確。得分：6分
+
+### Q12: (4分)
+答案部分正確。C部分未提供答案。得分：3分
+
+### Q13: (5分)
+答案未提供。得分：0分
+
+### Q14: (5分)
+答案不完整。未提供完整的程式碼。得分：0分
+
+### Q15: (10分)
+答案未提供。得分：0分
+
+### Q16: (10分)
+答案錯誤。應該使用==運算子來比較字串，而不是使用=運算子。得分：0分
+
+### Q17: (10分)
+答案正確。得分：10分
+
+### Q18: (10分)
+答案部分正確。修改程式錯誤部分正確，但未提供程式執行結果。得分：5分
+
+## 總分：28分
+
+## 改進建議：
+1. 請確保理解題目要求，並提供完整的答案。
+2. 在撰寫程式碼時，請注意語法和邏輯的正確性。
+3. 請學習和理解C#的基本語法和概念，包括變數、運算子、控制結構、方法、例外處理等。
+4. 在處理可能出現例外的情況時，請使用try-catch語句來捕捉和處理例外。
+5. 在比較字串時，請使用==運算子，而不是=運算子。
+
+---
+
+## Claude-3.5-Sonnet 專家評分：35.0分  
+我將依照多代理人程式碼批改系統的評分標準進行詳細批改。
+
+### 總分：35分 (滿分100分)
+
+### 詳細評分分析：
+
+#### 問答題部分：
+Q1 (0/2分)：錯誤。(int)轉型會將6.5轉為整數6，而非保留小數。
+
+Q8 (1/2分)：只答對第一個輸出5，未說明第二個輸出為5。
+
+Q10 (0/2分)：錯誤。do-while迴圈至少會執行一次，因此會執行1次而非無限次。
+
+Q11 (2/6分)：計算結果正確(13700)，但格式不完整，應為NT$13,700.00。
+
+Q17 (2/10分)：只列出部分結果，未完整說明三個MessageBox的輸出內容。
+
+Q18 (1/10分)：只列出前半部結果，且未指出需要將ref改為out。
+
+#### 題組部分：
+Q2 (0/4分)：
+未使用組合指定運算子重寫，應改為：
+- count += 1
+- amount -= 5
+- radius *= 10
+- length /= 2
+
+Q12 (3/4分)：
+A、B、D答對，C未完整寫出while (!inputFile.EndOfStream)。
+
+#### 程式撰寫部分：
+Q3 (1/4分)：try-catch結構正確但內容過於簡略且語法錯誤。
+
+Q9 (2/5分)：基本迴圈結構正確，但未考慮效能優化。
+
+Q14 (2/10分)：只寫出基本框架，缺少具體實作細節。
+
+Q16 (1/10分)：邏輯概念正確但語法錯誤嚴重。
+
+### 改進建議：
+
+1. 基礎概念加強：
+   - 資料型態轉換(特別是整數和浮點數)
+   - 運算子(包括組合指定運算子)
+   - 迴圈控制結構
+
+2. 程式語法精進：
+   - try-catch異常處理的完整寫法
+   - 檔案操作的標準寫法
+   - 變數宣告和使用的正確語法
+
+3. 程式撰寫建議：
+   - 養成加入適當註解的習慣
+   - 注意程式碼縮排和格式化
+   - 確保變數命名符合慣例
+
+4. 答題技巧：
+   - 問答題需完整說明所有輸出結果
+   - 程式題需包含完整的程式碼結構
+   - 注意題目要求的具體實作細節
+
+5. 學習重點：
+   - 複習C#基礎語法
+   - 加強檔案操作相關知識
+   - 理解參數傳遞機制(值類型vs參考類型)
+
+建議多做練習，特別是實際撰寫程式碼的部分，這樣可以加深對語法的理解和熟悉度。
+
+---
+
+## 整合結果
+- 評分方法：arbitrated
+- 分數差異：7.0分
+- 最終得分：35.0分
+
+## 裁判決定
+分析兩位專家的評分，我發現他們在評分標準上基本一致，但在部分題目的評分上存在差異。例如，Q2題，GPT-4專家認為學生答案完全錯誤，給予0分，而Claude-3.5-Sonnet專家認為學生答案部分正確，給予部分分數。在Q11題，GPT-4專家認為學生答案完全正確，給予滿分，而Claude-3.5-Sonnet專家認為學生答案部分正確，給予部分分數。
+
+綜合兩位專家的評分和評語，我認為學生在基礎知識和程式撰寫能力上都存在一定的不足，需要進一步學習和練習。在評分上，我認為Claude-3.5-Sonnet專家的評分較為合理，他在評分時考慮到了學生答案的部分正確性，並給予了相應的分數。
+
+因此，我認為學生的最終分數應該接近Claude-3.5-Sonnet專家的評分。
+
+最終裁決：35分。
+</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-09 11:11:47</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '批改報告_4a0a514f-cf9c-479a-ae12-564383443f4d.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

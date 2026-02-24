@@ -1,0 +1,212 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>批改結果 - e8397ac7-fa26-4a69-82d8-5442bfba1d59</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .method-badge {
+                background: #6c757d;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                display: inline-block;
+                margin: 10px 0;
+            }
+            .security-warning {
+                background: #dc3545;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #721c24;
+            }
+            .agent-details {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #007bff;
+            }
+            .score-comparison {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .agent-score, .score-diff {
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📋 程式批改結果</h1>
+            <p><strong>任務ID:</strong> e8397ac7-fa26-4a69-82d8-5442bfba1d59</p>
+            <p><strong>考試檔案:</strong> Questions.txt</p>
+            <p><strong>學生答案:</strong> A111222207廖呈紘.pdf</p>
+            <div class="method-badge">🤖 單代理人批改</div>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 評分結果</h2>
+            <div class="score-display">
+                最終得分: 25.0 分
+            </div>
+            
+            
+        </div>
+        
+        <div class="result-section">
+            <h2>📝 詳細批改報告</h2>
+            <div class="reasoning-content">### 評分
+
+#### 問答題批改
+Q1: 6.5轉型為int後，應該是6，答案錯誤。得分：0/2
+Q4: 沒有寫出程式敘述，答案錯誤。得分：0/2
+Q5: 沒有寫出程式敘述，答案錯誤。得分：0/5
+Q8: 答案正確。得分：2/2
+Q10: 答案錯誤，應該是0次。得分：0/2
+Q11: 答案正確。得分：6/6
+Q17: 答案正確。得分：10/10
+Q18: 答案錯誤，應該是x, y, z都被設為0。得分：0/10
+
+#### 題組批改
+Q2: 答案錯誤，應該使用組合指定運算子，例如：count += 1。得分：0/4
+Q12: 答案部分正確，C部分未寫出程式敘述。得分：3/4
+
+#### 撰寫程式批改
+Q3: 答案錯誤，未按照題目要求撰寫程式。得分：0/4
+Q6: 答案錯誤，未按照題目要求撰寫程式。得分：0/5
+Q7: 答案錯誤，未按照題目要求撰寫程式。得分：0/5
+Q9: 答案正確。得分：4/4
+Q13: 沒有寫出程式敘述，答案錯誤。得分：0/5
+Q14: 答案錯誤，未按照題目要求撰寫程式。得分：0/5
+Q15: 沒有寫出程式敘述，答案錯誤。得分：0/10
+Q16: 答案錯誤，未按照題目要求撰寫程式。得分：0/10
+
+### 總分：25/100
+
+### 評語：
+- 請確保你理解題目的要求，並按照要求撰寫程式。
+- 在撰寫程式時，請注意語法的正確性。
+- 在回答問答題時，請確保你的答案是準確的。
+- 建議多加練習，加強你的程式設計能力。</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-08 17:20:10</p>
+            <p>多代理人程式批改系統 © 2025</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '批改報告_e8397ac7-fa26-4a69-82d8-5442bfba1d59.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

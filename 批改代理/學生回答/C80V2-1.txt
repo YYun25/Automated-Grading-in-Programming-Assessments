@@ -1,0 +1,104 @@
+Q1:
+try
+{
+    int sum = Convert.ToInt32(value1TextBox.Text) + Convert.ToInt32(value2TextBox.Text);
+    sumLabel.Text = "結果是: " + sum;
+}
+catch
+{
+    sumLabel.Text = "錯誤";
+}
+
+Q2:
+int m = int.Parse(Console.ReadLine());
+int d = int.Parse(Console.ReadLine());
+
+if(m == 8 && d >= 10 && d <= 21)
+    Console.WriteLine("Leo");
+else if(m == 3 || m == 4)
+    Console.WriteLine("Aries");
+else if(m == 8 || m == 9)
+    Console.WriteLine("Virgo");
+else
+    Console.WriteLine("Unknown");
+
+Q3:
+double temperature;
+bool success = double.TryParse(tempTextBox.Text, out temperature);
+if(success)
+    MessageBox.Show(temperature);
+else
+    MessageBox.Show("Error");
+
+Q4:
+string[] input1 = Console.ReadLine().Split();
+string[] input2 = Console.ReadLine().Split();
+
+DateTime d1 = new DateTime(int.Parse(input1[0]), int.Parse(input1[1]), int.Parse(input1[2]));
+DateTime d2 = new DateTime(int.Parse(input2[0]), int.Parse(input2[1]), int.Parse(input2[2]));
+
+int days = (d1 - d2).Days;
+Console.WriteLine(days);
+
+Q5:
+StreamReader reader = new StreamReader("rainfall.txt");
+double total = 0;
+
+while(!reader.EndOfStream)
+{
+    string line = reader.ReadLine();
+    rainfallListBox.Items.Add(line);
+    total += Convert.ToDouble(line);
+}
+
+totalRainFallLabel.Text = total.ToString();
+
+Q6:
+int n = int.Parse(Console.ReadLine());
+int sum = 0;
+int original = n;
+
+for(int i = 2; i * i <= n; i++)
+{
+    while(n % i == 0)
+    {
+        sum += i;
+        n /= i;
+    }
+}
+if(n > 1) sum += n;
+
+Console.WriteLine(sum);
+
+Q7:
+第一個MessageBox: The value of number is 99
+第二個MessageBox: In ChangeMe, myValue is 0  
+第三個MessageBox: The value of number is 0
+
+Q8:
+int n = int.Parse(Console.ReadLine());
+List<int> list = new List<int>();
+
+for(int i = 1; i <= n; i++)
+    list.Add(i);
+
+Random r = new Random();
+while(list.Count > 0)
+{
+    int index = r.Next(list.Count);
+    Console.Write(list[index] + " ");
+    list.RemoveAt(index);
+}
+
+Q9:
+numberArray2 = numberArray1;
+
+Q10:
+string input = Console.ReadLine();
+string[] names = input.Split();
+
+for(int i = 0; i < names.Length; i++)
+{
+    if(names[i] != "")
+        Console.WriteLine(names[i]);
+}

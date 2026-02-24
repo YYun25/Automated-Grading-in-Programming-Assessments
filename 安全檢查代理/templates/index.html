@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>三代理人批改系統</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:980px;margin:0 auto}
+    header{background:#fff;border-radius:14px;padding:24px 28px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    h1{margin:0;font-size:22px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .card{background:#fff;border-radius:14px;padding:18px 18px 22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    label{font-weight:600;display:block;margin:6px 0}
+    input[type=file], select, textarea{width:100%;padding:10px;border:1px solid #e3e6ef;border-radius:10px;background:#fafbff}
+    textarea{min-height:220px;font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .btn{display:inline-block;background:#4f46e5;color:#fff;border:none;border-radius:10px;padding:10px 16px;cursor:pointer}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .muted{color:#777;font-size:13px}
+    .notice{padding:10px 12px;background:#f8fafc;border-left:4px solid #4f46e5;border-radius:8px;margin:10px 0}
+    .footer{margin-top:18px;color:#777}
+  </style>
+  <script>
+    async function onSubjectChange(sel){
+      const subject = sel.value;
+      location.search='?subject='+encodeURIComponent(subject);
+    }
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🎯 三代理人批改系統（GPT & Claude，Gemini 仲裁）</h1>
+      <div class="muted">仲裁永遠啟用；黑板只保存提詞相關訊息</div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="margin-top:12px">
+        {% for cat, msg in messages %}
+          <div class="notice">{{ msg }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="row">
+      <div class="card">
+        <form action="{{ url_for('grade') }}" method="post" enctype="multipart/form-data">
+          <label>科目</label>
+          <select name="subject" onchange="onSubjectChange(this)">
+            {% for s in ['C#','Java','Python','JavaScript'] %}
+              <option value="{{s}}" {{'selected' if s==subject else ''}}>{{s}}</option>
+            {% endfor %}
+          </select>
+
+        {% if current_prompt %}
+          <div class="notice">已載入「{{ subject }}」的提詞 v{{ current_prompt.version }}，可直接上傳檔案開始批改。</div>
+          <label>考卷題目檔案（txt/pdf/docx）</label>
+          <input type="file" name="exam_file" required accept=".txt,.pdf,.docx">
+          <label>學生答案檔案（txt/pdf/docx）</label>
+          <input type="file" name="student_file" required accept=".txt,.pdf,.docx">
+          <div style="margin-top:12px"><button class="btn" type="submit">🚀 開始批改</button></div>
+        {% else %}
+          <div class="notice">第一次使用「{{ subject }}」請先建立評分提詞。</div>
+          <div class="muted" style="margin:6px 0">建議包含：評分項目、配分、輸出 JSON 結構（score/rubric/items/feedback/part1~part4）。</div>
+          <textarea readonly style="display:none"></textarea>
+        {% endif %}
+        </form>
+      </div>
+
+      <div class="card">
+        <form action="{{ url_for('prompt_save') }}" method="post">
+          <input type="hidden" name="subject" value="{{ subject }}">
+          <label>評分提詞（{{ subject }}）</label>
+          <textarea name="prompt_content" placeholder="在此貼上或撰寫你的評分提詞...">{% if current_prompt %}{{ current_prompt.prompt_content }}{% endif %}</textarea>
+          <div style="margin-top:12px">
+            <button class="btn" type="submit">{{ '更新提詞' if current_prompt else '建立提詞' }}</button>
+            <span class="muted" style="margin-left:8px">目前：{{ 'v'+current_prompt.version|string if current_prompt else '尚未建立' }}</span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>提示：每次批改完成後，Gemini 會檢查並建議是否更新提詞；若有更新，系統會自動版本+1。</div>
+    </div>
+
+  </div>
+</body>
+</html>

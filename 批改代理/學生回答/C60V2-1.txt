@@ -1,0 +1,124 @@
+Q1:
+int a = value1TextBox;
+int b = value2TextBox;
+sumLabel = a + b;
+
+Q2:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int month = Console.ReadLine();
+        
+        switch(month)
+        {
+            case 1: Console.WriteLine("水瓶座"); break;
+            case 2: Console.WriteLine("雙魚座"); break;
+            case 3: Console.WriteLine("牡羊座"); break;
+            case 4: Console.WriteLine("金牛座"); break;
+            case 5: Console.WriteLine("雙子座"); break;
+            case 6: Console.WriteLine("巨蟹座"); break;
+            case 7: Console.WriteLine("獅子座"); break;
+            case 8: Console.WriteLine("處女座"); break;
+            case 9: Console.WriteLine("天秤座"); break;
+            case 10: Console.WriteLine("天蠍座"); break;
+            case 11: Console.WriteLine("射手座"); break;
+            case 12: Console.WriteLine("摩羯座"); break;
+        }
+    }
+}
+
+Q3:
+double temperature = tempTextBox.Text;
+MessageBox.Show("溫度是：" + temperature);
+
+Q4:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int year1 = Console.ReadLine();
+        int month1 = Console.ReadLine();
+        int day1 = Console.ReadLine();
+        
+        int year2 = Console.ReadLine();
+        int month2 = Console.ReadLine();
+        int day2 = Console.ReadLine();
+        
+        int result = day1 - day2;
+        Console.WriteLine(result);
+    }
+}
+
+Q5:
+string data = File.ReadAllText("rainfall.txt");
+rainfallListBox.Items.Add(data);
+
+totalRainFallLabel.Text = "很多雨";
+
+Q6: 
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int x = int.Parse(Console.ReadLine());
+        int sum = 0;
+        
+        for(int i = 1; i < x; i++)
+        {
+            if(x % i == 0)
+                sum = sum + i;
+        }
+        
+        Console.WriteLine(sum);
+    }
+}
+
+Q7:
+第一個訊息框顯示：The value of number is 99
+第二個訊息框顯示：In ChangeMe, myValue is 0
+第三個訊息框顯示：The value of number is 0
+
+Q8:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int n = int.Parse(Console.ReadLine());
+        Random r = new Random();
+        for(int i = 0; i < n; i++)
+        {
+            Console.Write(r.Next() + " ");
+        }
+    }
+}
+
+Q9:
+for(int i = 0; i <= 100; i++)
+{
+    numberArray2[i] = numberArray1[i];
+}
+
+Q10:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+      string input = Console.ReadLine();
+        
+        for(int i = 0; i < input.Length; i++)
+        {
+            Console.WriteLine(input[i]);
+        }
+    }
+}

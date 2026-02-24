@@ -1,0 +1,207 @@
+
+Q1:
+try
+{
+    int value1 = int.Parse(value1TextBox.Text);
+    int value2 = int.Parse(value2TextBox.Text);
+    int sum = value1 + value2;
+    sumLabel.Text = sum.ToString();
+}
+catch (FormatException)
+{
+    MessageBox.Show("請輸入有效的整數");
+}
+catch (Exception ex)
+{
+    MessageBox.Show("發生錯誤：" + ex.Message);
+}
+
+Q2:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string[] input = Console.ReadLine().Split();
+        int m = int.Parse(input[0]);
+        int d = int.Parse(input[1]);
+        
+        string zodiac = "";
+        
+        if ((m == 3 && d >= 21) || (m == 4 && d <= 20))
+            zodiac = "Aries";
+        else if ((m == 4 && d >= 21) || (m == 5 && d <= 21))
+            zodiac = "Taurus";
+        else if ((m == 5 && d >= 22) || (m == 6 && d <= 21))
+            zodiac = "Gemini";
+        else if ((m == 6 && d >= 22) || (m == 7 && d <= 22))
+            zodiac = "Cancer";
+        else if ((m == 7 && d >= 23) || (m == 8 && d <= 21))
+            zodiac = "Leo";
+        else if ((m == 8 && d >= 22) || (m == 9 && d <= 23))
+            zodiac = "Virgo";
+        else if ((m == 9 && d >= 24) || (m == 10 && d <= 23))
+            zodiac = "Libra";
+        else if ((m == 10 && d >= 24) || (m == 11 && d <= 22))
+            zodiac = "Scorpio";
+        else if ((m == 11 && d >= 23) || (m == 12 && d <= 22))
+            zodiac = "Sagittarius";
+        else if ((m == 12 && d >= 23) || (m == 1 && d <= 20))
+            zodiac = "Capricorn";
+        else if ((m == 1 && d >= 21) || (m == 2 && d <= 19))
+            zodiac = "Aquarius";
+        else if ((m == 2 && d >= 20) || (m == 3 && d <= 20))
+            zodiac = "Pisces";
+        
+        Console.WriteLine(zodiac);
+    }
+}
+
+Q3:
+double temperature;
+
+if (double.TryParse(tempTextBox.Text, out temperature))
+{
+    MessageBox.Show("溫度為：" + temperature.ToString());
+}
+else
+{
+    MessageBox.Show("輸入格式錯誤，請輸入有效的數字");
+}
+
+Q4:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string line1, line2;
+        
+        while ((line1 = Console.ReadLine()) != null)
+        {
+            line2 = Console.ReadLine();
+            
+            string[] date1Parts = line1.Split();
+            string[] date2Parts = line2.Split();
+            
+            DateTime date1 = new DateTime(
+                int.Parse(date1Parts[0]),
+                int.Parse(date1Parts[1]),
+                int.Parse(date1Parts[2])
+            );
+            
+            DateTime date2 = new DateTime(
+                int.Parse(date2Parts[0]),
+                int.Parse(date2Parts[1]),
+                int.Parse(date2Parts[2])
+            );
+            
+            TimeSpan difference = date1 - date2;
+            Console.WriteLine(Math.Abs(difference.Days));
+        }
+    }
+}
+
+Q5:
+StreamReader reader = new StreamReader("rainfall.txt");
+string line;
+double totalRainfall = 0;
+
+while ((line = reader.ReadLine()) != null)
+{
+    rainfallListBox.Items.Add(line);
+    totalRainfall += double.Parse(line);
+}
+
+reader.Close();
+totalRainFallLabel.Text = "總降雨量：" + totalRainfall.ToString();
+
+Q6:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string input;
+        
+        while ((input = Console.ReadLine()) != null)
+        {
+            long x = long.Parse(input);
+            long sum = 0;
+            long temp = x;
+            
+            for (long i = 2; i <= temp; i++)
+            {
+                while (temp % i == 0)
+                {
+                    sum += i;
+                    temp /= i;
+                }
+            }
+            
+            Console.WriteLine(sum);
+        }
+    }
+}
+
+Q7: 
+第一個訊息框：The value of number is 99
+第二個訊息框：In ChangeMe, myValue is 0
+第三個訊息框：The value of number is 99
+
+Q8:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int n = int.Parse(Console.ReadLine());
+        Random rand = new Random();
+        
+        int[] numbers = new int[n];
+        for (int i = 0; i < n; i++)
+        {
+            numbers[i] = i + 1;
+        }
+        
+        for (int i = n - 1; i > 0; i--)
+        {
+            int j = rand.Next(0, i + 1);
+            int temp = numbers[i];
+            numbers[i] = numbers[j];
+            numbers[j] = temp;
+        }
+        
+        for (int i = 0; i < n; i++)
+        {
+            Console.Write(numbers[i]);
+            if (i < n - 1)
+                Console.Write(" ");
+        }
+        Console.WriteLine();
+    }
+}
+
+Q9:
+Array.Copy(numberArray1, numberArray2, 100);
+
+Q10:
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string input = Console.ReadLine();
+        string[] names = input.Split();
+        
+        foreach (string name in names)
+        {
+            Console.WriteLine(name);
+        }
+    }
+}

@@ -1,0 +1,153 @@
+Q1:  
+答案：6
+
+Q2:
+答案a. count += 1
+答案b. amount-=5
+答案c. radius *=10
+答案d. length/=2 
+
+
+Q3:
+try
+{
+    int value1 = int.Parse(value1TextBox.Text);
+    int value2 = int.Parse(value2TextBox.Text);
+    int sum = value1 + value2;
+    sumLabel.Text = sum.ToString();
+}
+catch (Exception ex)
+{
+    MessageBox.Show(ex.Message);
+}
+
+Q4:
+
+double product = Math.Pow(12, 5);
+
+Q5:
+if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+{
+    MessageBox.Show(year.ToString() + " 是閏年。");
+}
+else
+{
+    MessageBox.Show(year.ToString() + " 不是閏年。");
+}
+
+Q6:
+double temperature;
+if (double.TryParse(tempTextBox.Text, out temperature))  
+{
+    MessageBox.Show("溫度為: " + temperature.ToString());
+}
+else
+{
+    MessageBox.Show("輸入無效，請輸入一個有效的數字。");
+}
+
+Q7:
+if (nameListBox.SelectedIndex != -1)
+{
+    MessageBox.Show("選取的項目是: " + nameListBox.SelectedItem.ToString());
+}
+else
+{
+    MessageBox.Show("未選取任何項目。");
+}
+
+Q8:
+5
+5
+
+Q9:
+for (int count = 1; count <= 50; count++)
+{
+    MessageBox.Show("我喜歡程式設計");
+}
+
+
+Q10:
+1次
+
+Q11:
+NT$13,700.00
+
+Q12:
+答案a. inputFile = File.OpenText("Sales.txt");
+答案b. sales = decimal.Parse(inputFile.ReadLine());
+答案c. while (!inputFile.EndOfStream)
+答案d. inputFile.Close(); 
+
+Q13:
+Random rand = new Random();  
+int randomNumber = rand.Next(100, 400); 
+
+Q14:
+try
+{
+    StreamReader reader;
+    double totalRainfall = 0;
+    rainfallListBox.Items.Clear();
+    reader = File.OpenText("rainfall.txt");
+    while (!reader.EndOfStream)
+    {
+        string line = reader.ReadLine();
+        rainfallListBox.Items.Add(line);
+        totalRainfall += double.Parse(line);
+    }
+    reader.Close();
+    totalRainFallLabel.Text = "總雨量: " + totalRainfall;
+}
+catch (Exception ex)
+{
+    MessageBox.Show(ex.Message);
+}
+
+Q15:
+try
+{
+    StreamWriter writer = File.CreateText("multiples_of_three.txt");
+    for (int i = 1; i < 1000; i++)
+    {
+        if (i % 3 == 0)
+        {
+            writer.WriteLine(i);
+        }
+    }
+    writer.Close();
+}
+catch (Exception ex)
+{
+    MessageBox.Show(ex.Message);
+}
+
+Q16:
+private bool IsAuthorizedUser(string userName, string passwd)
+{
+    if (userName == ACCOUNT && passwd == PASSWORD)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+Q17:
+The value of number is 99
+In ChangeMe, myValue is 0
+The value of number is 99
+
+Q18:
+修正：private void SetToZero(ref int number)
+
+執行結果：
+x is set to 99
+y is set to 100
+z is set to 101
+##########
+x is set to 0
+y is set to 0
+z is set to 0

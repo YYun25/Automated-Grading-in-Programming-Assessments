@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{{ exam.title }} - {{ result.student_id }} 詳細批改結果</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:1400px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-bottom:24px}
+    h1{margin:0 0 8px;font-size:24px;color:#1f2937}
+    h2{margin:0 0 16px;font-size:20px;color:#1f2937}
+    h3{margin:0 0 12px;font-size:18px;color:#374151}
+    .exam-meta{color:#6b7280;margin-bottom:20px}
+    .back-link{display:inline-block;margin-bottom:20px;color:#4f46e5;text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .score-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+    .score-card{background:#f8fafc;border-radius:8px;padding:20px;text-align:center;border-left:4px solid #4f46e5}
+    .score-card.gpt{border-left-color:#10b981}
+    .score-card.claude{border-left-color:#3b82f6}
+    .score-card.final{border-left-color:#f59e0b}
+    .score-number{font-size:32px;font-weight:700;margin:0;color:#1f2937}
+    .score-label{color:#6b7280;font-size:14px;margin:4px 0 0}
+    .section{margin-bottom:32px}
+    .grading-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+    .grading-table th,.grading-table td{padding:12px;text-align:left;border-bottom:1px solid #e5e7eb}
+    .grading-table th{background:#f9fafb;font-weight:600;color:#374151}
+    .grading-table tr:hover{background:#f9fafb}
+    .feedback-section{background:#f8fafc;border-radius:8px;padding:20px;margin-bottom:20px}
+    .feedback-content{white-space:pre-wrap;line-height:1.6;color:#374151}
+    .weakness-analysis{background:#fef3c7;border-radius:8px;padding:20px;margin-bottom:20px}
+    .weakness-analysis h3{color:#92400e;margin-bottom:16px}
+    .weakness-item{margin-bottom:16px;padding:12px;background:#fff;border-radius:6px;border-left:4px solid #f59e0b}
+    .weakness-topic{font-weight:600;color:#92400e;margin-bottom:8px}
+    .weakness-details{color:#6b7280;font-size:14px}
+    .tabs{display:flex;border-bottom:2px solid #e5e7eb;margin-bottom:20px}
+    .tab{padding:12px 24px;cursor:pointer;border-bottom:2px solid transparent;color:#6b7280;font-weight:500}
+    .tab.active{border-bottom-color:#4f46e5;color:#4f46e5}
+    .tab:hover{color:#4f46e5}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .risk-score{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;background:#d1fae5;color:#065f46}
+    .coach-comment{background:#eff6ff;border-radius:8px;padding:16px;margin-bottom:16px;border-left:4px solid #3b82f6}
+    .coach-comment h4{margin:0 0 8px;color:#1e40af}
+    .priority-actions{background:#f0fdf4;border-radius:8px;padding:16px;margin-bottom:16px;border-left:4px solid #10b981}
+    .priority-actions h4{margin:0 0 8px;color:#16a34a}
+    .practice-suggestions{background:#fef3c7;border-radius:8px;padding:16px;border-left:4px solid #f59e0b}
+    .practice-suggestions h4{margin:0 0 8px;color:#92400e}
+    .blackboard-container{max-height:600px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;padding:16px}
+    .blackboard-message{margin-bottom:16px;padding:12px;border-radius:6px;border-left:4px solid #6b7280}
+    .blackboard-message.used{border-left-color:#10b981;background:#f0fdf4}
+    .blackboard-message.consensus{border-left-color:#3b82f6;background:#eff6ff}
+    .blackboard-message.disagreement{border-left-color:#f59e0b;background:#fffbeb}
+    .blackboard-message.arbitration_summary{border-left-color:#8b5cf6;background:#f3e8ff}
+    .blackboard-message.similarity_check{border-left-color:#06b6d4;background:#ecfeff}
+    .blackboard-message.weakness_review{border-left-color:#f97316;background:#fff7ed}
+    .blackboard-message.security_scan{border-left-color:#ef4444;background:#fef2f2}
+    .message-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .message-type{font-weight:600;color:#374151;font-size:14px}
+    .message-time{color:#6b7280;font-size:12px}
+    .message-content{color:#1f2937;line-height:1.5;white-space:pre-wrap}
+    .message-payload{margin-top:8px;font-size:12px}
+    .message-payload details{color:#6b7280}
+    .message-payload pre{background:#f9fafb;padding:8px;border-radius:4px;overflow-x:auto;font-size:11px}
+    
+    /* 題詞建議樣式 */
+    .prompt-suggestion{background:#e8f5e8;border:2px solid #28a745;border-radius:8px;padding:16px;margin-top:12px}
+    .prompt-suggestion h4{color:#155724;margin:0 0 12px 0;font-size:16px}
+    .prompt-suggestion h5{color:#155724;margin:12px 0 8px 0;font-size:14px}
+    .prompt-content{background:#ffffff;border:1px solid #c3e6cb;border-radius:4px;padding:12px;margin:8px 0}
+    .prompt-content pre{background:transparent;border:none;padding:0;margin:0;font-size:13px;line-height:1.4;white-space:pre-wrap;word-wrap:break-word}
+    .suggestion-reason{background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;padding:12px;margin:8px 0}
+    .suggestion-reason p{margin:0;color:#495057;line-height:1.5}
+    .suggestion-actions{margin-top:12px;display:flex;align-items:center;gap:12px}
+    .apply-status{font-size:14px;font-weight:500}
+    .apply-status.success{color:#28a745}
+    .apply-status.error{color:#dc3545}
+    .btn{display:inline-block;padding:8px 16px;background:#4f46e5;color:#fff;border:none;border-radius:6px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:500}
+    .btn:hover{background:#4338ca}
+    .btn-success{background:#28a745}
+    .btn-success:hover{background:#218838}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="{{ url_for('exam_results', exam_id=exam.exam_id) }}" class="back-link">← 返回考試結果</a>
+    
+    <div class="card">
+      <h1>{{ exam.title }} - {{ result.student_id }} 詳細批改結果</h1>
+      <div class="exam-meta">
+        科目：{{ exam.subject }} | 
+        批改時間：{{ result.graded_at.strftime('%Y-%m-%d %H:%M:%S') }} | 
+        狀態：<span class="status status-{{ result.status }}">{{ result.status }}</span>
+      </div>
+
+      <!-- 分數摘要 -->
+      <div class="score-summary">
+        <div class="score-card gpt">
+          <div class="score-number">{{ result.gpt_score }}</div>
+          <div class="score-label">GPT 分數</div>
+        </div>
+        <div class="score-card claude">
+          <div class="score-number">{{ result.claude_score }}</div>
+          <div class="score-label">Claude 分數</div>
+        </div>
+        <div class="score-card final">
+          <div class="score-number">{{ result.final_score }}</div>
+          <div class="score-label">最終分數</div>
+        </div>
+      </div>
+
+      <!-- 標籤頁 -->
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('final')">最終結果</div>
+        <div class="tab" onclick="showTab('gpt')">GPT 評分</div>
+        <div class="tab" onclick="showTab('claude')">Claude 評分</div>
+        {% if result.weakness_analysis %}
+        <div class="tab" onclick="showTab('weakness')">弱點分析</div>
+        {% endif %}
+        {% if blackboard_messages %}
+        <div class="tab" onclick="showTab('blackboard')">批改過程</div>
+        {% endif %}
+        {% if learning_suggestions %}
+        <div class="tab" onclick="showTab('suggestions')">學習建議</div>
+        {% endif %}
+      </div>
+
+      <!-- 最終結果 -->
+      <div id="final" class="tab-content active">
+        <div class="section">
+          <h2>最終評分結果</h2>
+          {% if result.final_table %}
+            <div class="feedback-content">{{ result.final_table | safe }}</div>
+          {% else %}
+            <p>暫無詳細評分表格</p>
+          {% endif %}
+        </div>
+        
+        <div class="section">
+          <h2>最終反饋</h2>
+          <div class="feedback-section">
+            <div class="feedback-content">{{ result.final_feedback }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GPT 評分 -->
+      <div id="gpt" class="tab-content">
+        <div class="section">
+          <h2>GPT 評分結果</h2>
+          {% if result.gpt_table %}
+            <div class="feedback-content">{{ result.gpt_table | safe }}</div>
+          {% else %}
+            <p>暫無 GPT 詳細評分表格</p>
+          {% endif %}
+        </div>
+        
+        <div class="section">
+          <h2>GPT 反饋</h2>
+          <div class="feedback-section">
+            <div class="feedback-content">{{ result.gpt_feedback }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claude 評分 -->
+      <div id="claude" class="tab-content">
+        <div class="section">
+          <h2>Claude 評分結果</h2>
+          {% if result.claude_table %}
+            <div class="feedback-content">{{ result.claude_table | safe }}</div>
+          {% else %}
+            <p>暫無 Claude 詳細評分表格</p>
+          {% endif %}
+        </div>
+        
+        <div class="section">
+          <h2>Claude 反饋</h2>
+          <div class="feedback-section">
+            <div class="feedback-content">{{ result.claude_feedback }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 詳細學習建議 -->
+      <div id="weakness" class="tab-content">
+        <div class="section">
+          <h2>📊 詳細學習分析</h2>
+          
+          {# 教練短評：優先用 result.weakness_analysis；若無，退回 learning_suggestions #}
+          {% set wa = result.weakness_analysis if result.weakness_analysis else None %}
+          {% if wa and wa.coach_comment %}
+          <div class="coach-comment">
+            <h4>教練短評</h4>
+            <div class="feedback-content">{{ wa.coach_comment }}</div>
+          </div>
+          {% elif learning_suggestions and learning_suggestions.coach_comment %}
+          <div class="coach-comment">
+            <h4>教練短評</h4>
+            <div class="feedback-content">{{ learning_suggestions.coach_comment }}</div>
+          </div>
+          {% endif %}
+
+          
+          <!-- 弱點分析表格：優先使用 result.weakness_analysis -->
+          {% if wa and wa.weakness_clusters %}
+          <div class="section">
+            <h3>弱點分析</h3>
+            <table class="grading-table">
+              <thead>
+                <tr>
+                  <th>主題</th>
+                  <th>頻次</th>
+                  <th>相關題號</th>
+                  <th>代表性片語</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for weakness in wa.weakness_clusters %}
+                <tr>
+                  <td>{{ weakness.topic }}</td>
+                  <td>{{ weakness.frequency }}</td>
+                  <td>{{ weakness.evidence_qids | join(', ') }}</td>
+                  <td>
+                    {% for phrase in weakness.evidence_snippets %}
+                      <div class="weakness-item">
+                        <div class="weakness-topic">{{ phrase }}</div>
+                      </div>
+                    {% endfor %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% elif learning_suggestions and learning_suggestions.weakness_clusters %}
+          <div class="section">
+            <h3>弱點分析</h3>
+            <table class="grading-table">
+              <thead>
+                <tr>
+                  <th>主題</th>
+                  <th>頻次</th>
+                  <th>相關題號</th>
+                  <th>代表性片語</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for weakness in learning_suggestions.weakness_clusters %}
+                <tr>
+                  <td>{{ weakness.topic }}</td>
+                  <td>{{ weakness.frequency }}</td>
+                  <td>{{ weakness.evidence_qids | join(', ') }}</td>
+                  <td>
+                    {% for phrase in weakness.evidence_snippets %}
+                      <div class="weakness-item">
+                        <div class="weakness-topic">{{ phrase }}</div>
+                      </div>
+                    {% endfor %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+
+          {# 在弱點分析頁不顯示建議內容，避免與學習建議分頁重複 #}
+        </div>
+      </div>
+
+      <!-- 批改過程（黑板訊息） -->
+      {% if blackboard_messages %}
+      <div id="blackboard" class="tab-content">
+        <div class="section">
+          <h2>批改過程詳情</h2>
+          <div class="blackboard-container">
+            {% for message in blackboard_messages %}
+              <div class="blackboard-message {{ message.type }}">
+                <div class="message-header">
+                  <span class="message-type">{{ message.action or message.type }}</span>
+                  <span class="message-time">
+                    {% if message.timestamp %}
+                      {{ message.timestamp }}
+                    {% endif %}
+                  </span>
+                </div>
+                <div class="message-content">
+                  {{ message.content }}
+                </div>
+                
+                <!-- 特別處理題詞建議 -->
+                {% if message.action == 'suggestion' and message.payload and message.payload.proposed %}
+                <div class="prompt-suggestion">
+                  <h4>📝 建議的新題詞：</h4>
+                  <div class="prompt-content">
+                    <pre>{{ message.payload.proposed }}</pre>
+                  </div>
+                  {% if message.payload.reason %}
+                  <div class="suggestion-reason">
+                    <h5>💡 建議理由：</h5>
+                    <p>{{ message.payload.reason }}</p>
+                  </div>
+                  {% endif %}
+                  <div class="suggestion-actions">
+                    <button class="btn btn-success" onclick="applyPrompt(this, '{{ message.payload.proposed | replace("'", "\\'") | replace('"', '\\"') | replace('\n', '\\n') | replace('\r', '\\r') }}', '{{ result.task_id or "" }}')">
+                      ✅ 套用建議題詞
+                    </button>
+                    <span class="apply-status" id="apply-status-{{ loop.index }}"></span>
+                  </div>
+                </div>
+                {% endif %}
+                
+                {% if message.payload %}
+                <div class="message-payload">
+                  <details>
+                    <summary>詳細資料</summary>
+                    <pre>{{ message.payload | tojson(indent=2) }}</pre>
+                  </details>
+                </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- 學習建議 -->
+      {% if learning_suggestions %}
+      <div id="suggestions" class="tab-content">
+        <div class="section">
+          <h2>🎯 個人學習建議</h2>
+          
+          <!-- 表現概覽 -->
+          <div class="score-summary">
+            <div class="score-card">
+              <div class="score-number">{{ learning_suggestions.performance_summary.student_score }}</div>
+              <div class="score-label">您的分數</div>
+            </div>
+            <div class="score-card">
+              <div class="score-number">{{ learning_suggestions.performance_summary.avg_score }}</div>
+              <div class="score-label">全班平均</div>
+            </div>
+            <div class="score-card">
+              <div class="score-number">{{ learning_suggestions.performance_summary.rank_percentile }}%</div>
+              <div class="score-label">排名百分位</div>
+            </div>
+            <div class="score-card">
+              <div class="score-number" style="color: {% if learning_suggestions.score_diff > 0 %}#10b981{% else %}#ef4444{% endif %};">
+                {% if learning_suggestions.score_diff > 0 %}+{% endif %}{{ learning_suggestions.score_diff }}
+              </div>
+              <div class="score-label">與平均分差距</div>
+            </div>
+          </div>
+
+          <!-- 教練短評 -->
+          {% if learning_suggestions and learning_suggestions.coach_comment %}
+          <div class="coach-comment">
+            <h4>教練短評</h4>
+            <div class="feedback-content">{{ learning_suggestions.coach_comment }}</div>
+          </div>
+          {% endif %}
+
+          
+          {# 學習建議頁不顯示弱點聚類，避免與「詳細學習分析」分頁重複 #}
+
+          <!-- 優先修正行動 -->
+          {% if learning_suggestions and learning_suggestions.prioritized_actions %}
+          <div class="priority-actions">
+            <h4>優先修正行動</h4>
+            {% for action in learning_suggestions.prioritized_actions %}
+              <div class="weakness-item">
+                <div class="weakness-topic">{{ action.action }}</div>
+                <div class="weakness-details">
+                  <strong>修正範例：</strong>{{ action.example_fix }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- 練習建議 -->
+          {% if learning_suggestions and learning_suggestions.practice_suggestions %}
+          <div class="practice-suggestions">
+            <h4>學習建議</h4>
+            {% for suggestion in learning_suggestions.practice_suggestions %}
+              <div class="weakness-item">
+                <div class="weakness-topic">{{ suggestion.title }}</div>
+                {% if suggestion.description %}
+                <div class="weakness-details">
+                  <strong>描述：</strong>{{ suggestion.description }}
+                </div>
+                {% endif %}
+                {% if suggestion.key_focus %}
+                <div class="weakness-details">
+                  <strong>重點關注：</strong>
+                  <ul>
+                    {% for focus in suggestion.key_focus %}
+                    <li>{{ focus }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+                {% if suggestion.examples %}
+                <div class="weakness-details">
+                  <strong>範例：</strong>
+                  <ul>
+                    {% for example in suggestion.examples %}
+                    <li>{{ example }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+                {% if suggestion.pre_submission_check %}
+                <div class="weakness-details">
+                  <strong>提交前檢查：</strong>
+                  {{ suggestion.pre_submission_check }}
+                </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      // 隱藏所有標籤內容
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+      
+      // 移除所有標籤的 active 類別
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      // 顯示選中的標籤內容
+      document.getElementById(tabName).classList.add('active');
+      
+      // 為選中的標籤添加 active 類別
+      event.target.classList.add('active');
+    }
+    
+    async function applyPrompt(button, promptContent, taskId) {
+      const statusElement = button.nextElementSibling;
+      
+      // 禁用按鈕並顯示載入狀態
+      button.disabled = true;
+      button.textContent = '套用中...';
+      statusElement.textContent = '';
+      
+      console.log('套用題詞:', {
+        subject: '{{ exam.subject }}',
+        promptContent: promptContent.substring(0, 100) + '...',
+        taskId: taskId
+      });
+      
+      try {
+        const response = await fetch('/api/prompt/apply', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            subject: '{{ exam.subject }}',
+            prompt_content: promptContent,
+            task_id: taskId
+          })
+        });
+        
+        const result = await response.json();
+        console.log('套用結果:', result);
+        
+        if (result.ok) {
+          statusElement.textContent = `✅ 已套用，版本升至 v${result.version}`;
+          statusElement.className = 'apply-status success';
+          button.textContent = '已套用';
+          button.style.background = '#6c757d';
+        } else {
+          statusElement.textContent = `❌ 套用失敗：${result.error}`;
+          statusElement.className = 'apply-status error';
+          button.disabled = false;
+          button.textContent = '✅ 套用建議題詞';
+        }
+      } catch (error) {
+        console.error('套用錯誤:', error);
+        statusElement.textContent = `❌ 套用失敗：${error.message}`;
+        statusElement.className = 'apply-status error';
+        button.disabled = false;
+        button.textContent = '✅ 套用建議題詞';
+      }
+    }
+  </script>
+</body>
+</html>
+
+

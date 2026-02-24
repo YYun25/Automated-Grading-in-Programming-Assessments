@@ -1,0 +1,47 @@
+Q15:
+try
+{
+    StreamWriter writer = File.CreateText("multiples_of_three.txt");
+    for (int i = 1; i < 1000; i++)
+    {
+        if (i % 3 == 0)
+        {
+            writer.WriteLine(i);
+        }
+    }
+    writer.Close();
+}
+catch (Exception ex)
+{
+    MessageBox.Show(ex.Message);
+}
+
+Q16:
+private bool IsAuthorizedUser(string userName, string passwd)
+{
+    if (userName == ACCOUNT && passwd == PASSWORD)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+Q17:
+The value of number is 99
+In ChangeMe, myValue is 0
+The value of number is 99
+
+Q18:
+修正：private void SetToZero(ref int number)
+
+執行結果：
+x is set to 99
+y is set to 100
+z is set to 101
+##########
+x is set to 0
+y is set to 0
+z is set to 0

@@ -1,0 +1,375 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>協作批改結果 - 3b76a6f9-a720-4d04-b56d-c29349974d3c</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .method-badge {
+                background: #6c757d;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                display: inline-block;
+                margin: 10px 0;
+            }
+            .security-warning {
+                background: #dc3545;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #721c24;
+            }
+            .collaboration-details {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #007bff;
+            }
+            .agent-comparison {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+                margin: 15px 0;
+            }
+            .agent-result {
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                border-left: 4px solid #667eea;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .blackboard-info {
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 15px;
+                border-left: 4px solid #28a745;
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🤖 協作型三代理人批改結果</h1>
+            <p><strong>任務ID:</strong> 3b76a6f9-a720-4d04-b56d-c29349974d3c</p>
+            <p><strong>考試檔案:</strong> Questions.txt</p>
+            <p><strong>學生答案:</strong> A111222207廖呈紘.pdf</p>
+            <div class="method-badge">🤖 協作型三代理人批改</div>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 評分結果</h2>
+            <div class="score-display">
+                最終得分: 30.2 分
+            </div>
+            
+            
+        <div class="collaboration-details">
+            <h3>📊 協作批改詳情</h3>
+            <div class="agent-comparison">
+
+                <div class="agent-result">
+                    <h4>🔹 GPT4_Grader</h4>
+                    <p><strong>評分:</strong> 32.0分</p>
+                    <p><strong>信心度:</strong> 90%</p>
+                    <p><strong>評分時間:</strong> 2025-07-15T12:47:15.089105</p>
+                </div>
+
+                <div class="agent-result">
+                    <h4>🔸 Claude_Grader</h4>
+                    <p><strong>評分:</strong> 28.5分</p>
+                    <p><strong>信心度:</strong> 85%</p>
+                    <p><strong>評分時間:</strong> 2025-07-15T12:47:30.522586</p>
+                </div>
+
+            </div>
+            <div class="blackboard-info">
+                <h4>🔄 公告黑板狀態</h4>
+                <p><strong>當前階段:</strong> completed</p>
+                <p><strong>討論輪次:</strong> 0</p>
+                <p><strong>決策方式:</strong> consensus</p>
+            </div>
+        </div>
+
+        </div>
+        
+        <div class="result-section">
+            <h2>📝 詳細批改報告</h2>
+            <div class="reasoning-content">
+# 🤖 協作型三代理人批改報告
+
+## 📊 評分結果
+**最終得分：30.2分**
+**決策方式：consensus**
+
+---
+
+## 👥 代理人評分記錄
+
+### 🔹 GPT4_Grader (90% 信心度)
+**評分：32.0分**
+
+批改結果：
+
+Q1: 答案錯誤。應該是整數6，而不是浮點數6.5。得分：0/2
+
+Q2: 答案錯誤。應該使用組合指定運算子重寫語句，例如：a. count += 1; 而不是 count = count + 1;。得分：0/4
+
+Q3: 答案錯誤。應該使用try-catch語句來處理可能的異常，並使用int.Parse或int.TryParse來轉換TextBox的Text屬性。得分：0/4
+
+Q4: 答案錯誤。應該使用Math.Pow方法來計算12的5次方，例如：double product = Math.Pow(12, 5);。得分：0/2
+
+Q5: 答案未寫。得分：0/5
+
+Q6: 答案錯誤。應該使用double.TryParse方法來嘗試將tempTextBox的Text屬性轉換為double。得分：0/5
+
+Q7: 答案錯誤。應該檢查ListBox的SelectedIndex屬性是否不等於-1，然後才能讀取SelectedItem或SelectedValue屬性。得分：0/5
+
+Q8: 答案正確。得分：2/2
+
+Q9: 答案正確。得分：4/4
+
+Q10: 答案錯誤。該迴圈將不會進行任何迭代，因為在第一次檢查條件時，count < 0就為false。得分：0/2
+
+Q11: 答案正確。得分：6/6
+
+Q12: 答案部分正確。C部分未寫出判斷檔案是否還有資料未讀取的敘述。得分：3/4
+
+Q13: 答案未寫。得分：0/5
+
+Q14: 答案部分正確。未完全寫出程式碼。得分：2/5
+
+Q15: 答案未寫。得分：0/10
+
+Q16: 答案錯誤。應該使用==運算符來比較字串，而不是使用=運算符來賦值。得分：0/10
+
+Q17: 答案正確。得分：10/10
+
+Q18: 答案部分正確。未完全寫出程式碼。得分：5/10
+
+總分：32/100分
+
+---
+
+### 🔸 Claude_Grader (85% 信心度)
+**評分：28.5分**
+
+我將依照協作型三代理人批改系統的標準進行詳細評分：
+
+Q1 (2分): 0分
+- 錯誤。(int)轉型會將6.5轉為整數6，而非保留小數點。
+
+Q2 (4分): 0分
+- 未使用組合指定運算子重寫。正確答案應為：
+  a. count += 1
+  b. amount -= 5
+  c. radius *= 10
+  d. length /= 2
+
+Q3 (4分): 1分
+- 基本try-catch結構正確
+- 但缺少具體的數值轉換與計算邏輯
+- 語法不完整且不正確
+
+Q4 (2分): 0分
+- 未作答
+
+Q5 (2分): 0分
+- 未作答
+
+Q6 (5分): 1分
+- 有提到TryParse但語法完全不正確
+- 缺少完整的if-else結構和錯誤處理
+
+Q7 (5分): 1分
+- 嘗試讀取ListBox但語法錯誤
+- 缺少例外處理機制
+
+Q8 (2分): 0.5分
+- 只答對第一個輸出(5)
+- 未說明第二個輸出(5)
+
+Q9 (4分): 4分
+- 完整正確的for迴圈結構
+- 正確使用MessageBox顯示
+
+Q10 (2分): 0分
+- 錯誤。do-while迴圈會執行1次，因為是先執行再判斷條件
+
+Q11 (6分): 4分
+- 計算結果接近正確
+- 未標示正確的貨幣格式
+
+Q12 (4分): 3分
+- A、B、D答對
+- C未作答
+
+Q13 (5分): 0分
+- 未作答
+
+Q14 (10分): 2分
+- 基本檔案開啟結構正確
+- 缺少讀取邏輯和計算總和的程式碼
+
+Q15 (10分): 0分
+- 未作答
+
+Q16 (10分): 2分
+- 基本邏輯正確
+- 語法錯誤（使用=而非==）
+- 方法結構不完整
+
+Q17 (10分): 8分
+- 答對三個訊息框的輸出
+- 理解值傳遞的概念
+
+Q18 (10分): 2分
+- 只列出部分執行結果
+- 未指出需要修改ref為out
+- 未完整寫出執行結果
+
+總分：28.5分
+
+主要問題：
+1. 基本語法掌握不足
+2. 多道程式題未作答
+3. 檔案操作相關概念薄弱
+4. 型別轉換概念不清
+5. 程式結構完整性不足
+
+建議：
+1. 加強C#基礎語法學習
+2. 多練習檔案操作相關程式
+3. 理解型別轉換機制
+4. 完整學習例外處理概念
+5. 練習撰寫完整的程式結構
+
+---
+
+---
+
+## 🎯 系統特色
+- ✅ 三代理人協作確保評分客觀性
+- ✅ 公告黑板實現資訊透明化  
+- ✅ 智能仲裁解決評分分歧
+- ✅ 完整可追溯的評分過程
+
+批改完成時間：2025-07-15 12:47:30
+</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-15 12:47:30</p>
+            <p>🤖 採用協作型三代理人架構</p>
+            <p>✨ 支援智能仲裁與完整可追溯性</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '協作批改報告_3b76a6f9-a720-4d04-b56d-c29349974d3c.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

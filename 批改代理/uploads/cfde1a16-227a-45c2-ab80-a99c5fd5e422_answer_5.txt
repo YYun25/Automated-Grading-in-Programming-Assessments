@@ -1,0 +1,5 @@
+ Q9: int count;
+ for(count=1;count<=50;count++)
+ {
+ MesssageBox.show("我喜歡程式設計");
+ }

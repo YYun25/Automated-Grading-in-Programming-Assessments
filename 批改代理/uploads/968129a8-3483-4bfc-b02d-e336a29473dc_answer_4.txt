@@ -1,0 +1,5 @@
+ Q9: int count
+ for {
+     MessageBox.Show("我喜歡程式設計");
+    count++;
+ }

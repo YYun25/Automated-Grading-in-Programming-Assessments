@@ -1,0 +1,144 @@
+Q1：(2分)(((問答題)))以下程式碼執行後，wholePieces變數將包含什麼值？
+double totalPieces = 6.5;
+int wholePieces = (int)totalPieces;
+
+Q2 : (4分)(((題組)))使用組合指定運算子重寫以下語句：
+a. count = count + 1;
+b. amount = amount - 5;
+c. radius = radius * 10;
+d. length = length / 2;
+
+Q3 : (4分)(((撰寫程式)))為計算兩個整數之和並顯示結果的應用程式編寫一個try-catch語句。 該應用程式使用兩個名為value1TextBox和value2TextBox的TextBox控制元件來收集輸入，並使用名為sumLabel的標籤控制元件來顯示結果。
+
+Q4 : (2分)(((問答題)))寫出程式敘述，使用Math.Pow方法將數字12的5次方，並將結果儲存在名為product的double型態變數中。
+
+Q5 : (5分)一年是閏年，如果它能被 4 整除但不能被 100 整除，或者能被 400 整除。請撰寫一個 if-else 陳述式，檢查變數 year 是否為閏年，並顯示適當的訊息。
+
+Q6 : (5分)(((撰寫程式)))假設 tempTextBox 是一個 TextBox 控制項的名稱，temperature 是一個 double 變數的名稱。請撰寫一個使用其中一個 TryParse 方法的 if-else 陳述式，將 tempTextBox 控制項的 Text 屬性轉換為 double，並將結果儲存在 temperature 變數中，並將其值顯示在訊息框中。如果轉換失敗，則在訊息框中顯示錯誤訊息。
+
+Q7 : (5分)(((撰寫程式)))假設 nameListBox 是一個 ListBox 控制項。請撰寫程式碼以讀取 ListBox 中被選取的項目。請確保在沒有選取任何項目時不會發生例外狀況。
+
+Q8 : (2分)(((問答題)))以下程式碼示例將顯示哪些訊息？
+	int number = 5;
+	MessageBox. Show ((number++). ToString ()) ; 
+	MessageBox. Show ((--number). ToString ()) ;
+
+Q9 : (4分)(((撰寫程式)))寫一個for迴圈，顯示"我喜歡程式設計"50次。 假設您將使用一個名為count的變數作為計數器變數，使用MessageBox來顯示。。
+	
+
+Q10 : (2分)(((問答題)))以下迴圈將迭代多少次？
+
+	int count = 0;
+	do {
+	    MessageBox. Show (count. ToString ()) ; 
+	    count++;
+	}
+	while (count < 0) ;
+
+Q11 : (6分)(((問答題)))寫出以下程式執行結果(以新台幣為單位)
+	try
+	{
+	    decimal sales;        
+	    decimal total = 0m;  
+
+	   StreamReader inputFile;
+
+	   inputFile = File.OpenText("Sales.txt");
+
+	   while (!inputFile.EndOfStream)
+	   {
+	       sales = decimal.Parse(inputFile.ReadLine());
+	       total += sales;
+	   }
+
+	   inputFile.Close();
+
+	   totalLabel.Text = total.ToString("C");
+
+	}
+	catch (Exception ex)
+	{
+	    MessageBox.Show(ex.Message);
+	}
+
+	Sales.txt 檔案內容
+	1000.0
+	1200.0
+	1800.0
+	1500.0
+	2100.0
+	2500.0
+	2000.0
+	1600.0
+
+Q12 : (4分)(((題組)))以Q11的程式，回答以下問題
+	A. 寫出為了讀取資料開啟檔案的敘述
+	B. 寫出從檔案中讀取一行文字的敘述
+	C. 寫出判斷檔案是否還有資料未讀取的敘述
+	D. 寫出關閉檔案的敘述
+
+Q13 : (5分)(((撰寫程式)))編寫建立random物件的程式碼，然後產生100到399範圍內的隨機整數，並指定給變數randomNumber
+
+Q14 : (10分)(((撰寫程式)))假設名為rainfall.txt的檔案包含一個月的降雨資料。 編寫一個程式碼示例，該程式碼示例使用while迴圈讀取檔案，並在ListBox控制元件中顯示其內容，同時計算月降雨總量，顯示在Label中。
+	提示：
+	ListBox名稱為rainfallListBox
+	StreamReader reader
+	Label名稱為totalRainFallLabel
+
+Q15 : (10分)(((撰寫程式)))寫出程式碼，利用迴圈找出1~999內所有3的倍數，並將結果寫入檔案中
+	提示：
+	StreamWriter writer
+	檔案名稱 multiples_of_three.txt
+	File.CreateText(""<FILENAME>")/File.AppendText("<FILENAME>")
+	需要加入try-catch
+
+Q16 : (10分)(((撰寫程式)))請寫出方法，名稱為IsAuthorizedUser，接收兩個字串變數(userName跟passwd)為參數，若userName與ACCOUNT相同，同時passwd與PASSWORD相同，回傳布林值True，否則回傳False)
+	已知：
+	const string ACCOUNT = "admin";
+	const string PASSWORD = "1234";
+
+ Q17 : (10分)(((問答題)))請問以下程式執行結果
+
+	private void goButton_Click(object sender, EventArgs e)
+	{
+	    int number = 99;
+	    MessageBox.Show("The value of number is " + number);
+	    ChangeMe(number);
+	    MessageBox.Show("The value of number is " + number);
+	}
+
+	private void ChangeMe(int myValue)
+	{
+	    myValue = 0;
+	    MessageBox.Show("In ChangeMe, myValue is " + myValue);
+	}
+
+Q18 : (10分)(((問答題)))請先修改程式錯誤，再寫下程式執行結果
+
+	private void SetToZero(out int number)
+	{
+	    number = 0;
+	}
+
+	private void goButton_Click(object sender, EventArgs e)
+	{
+	    // Declare some local int variables.
+	    int x = 99, y = 100, z = 101;
+
+	    // Display the values in those variables.
+	    outputListBox.Items.Clear();
+	    outputListBox.Items.Add("x is set to " + x);
+	    outputListBox.Items.Add("y is set to " + y);
+	    outputListBox.Items.Add("z is set to " + z);
+
+	    // Pass each variable to SetToZero.
+	    SetToZero(ref x);
+	    SetToZero(ref y);
+	    SetToZero(ref z);
+
+	    // Display the values in those variables again.
+	    outputListBox.Items.Add("##########"); //10個#
+	    outputListBox.Items.Add("x is set to " + x);
+	    outputListBox.Items.Add("y is set to " + y);
+	    outputListBox.Items.Add("z is set to " + z);
+	}

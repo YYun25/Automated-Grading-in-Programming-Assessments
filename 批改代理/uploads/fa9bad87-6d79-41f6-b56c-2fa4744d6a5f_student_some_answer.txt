@@ -1,0 +1,26 @@
+ Q15: using (StreamWriter writer = new StreamWriter("multiples_of_three.txt"))
+ {
+頁尾 - 第 2 頁
+    for (int i = 1; i <= 999; i++)
+自動生成的 PDF 文件
+{
+    if (i % 3 == 0)
+    {
+     }
+       writer.WriteLine(i)
+
+Q16: const string ACCOUNT = "admin";
+ const string PASSWORD = "1234";
+
+Q17: The value of number is number 99
+ In ChangeMe, myValue is  0
+
+Q18：
+x is set to 99
+y is set to 100
+z is set to 101
+
+x is set to 0
+y is set to 0
+z is set to 0
+

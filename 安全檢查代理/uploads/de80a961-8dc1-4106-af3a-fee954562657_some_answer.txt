@@ -1,0 +1,79 @@
+Q15：(10分) 撰寫程式
+try
+{
+    StreamWriter writer = File.CreateText("multiples_of_three.txt");
+    
+    for (int i = 1; i <= 999; i++)
+    {
+        if (i % 3 == 0)
+        {
+            writer.WriteLine(i);
+        }
+    }
+    
+    writer.Close();
+    MessageBox.Show("檔案寫入完成");
+}
+catch (Exception ex)
+{
+    MessageBox.Show("檔案寫入錯誤：" + ex.Message);
+}
+
+
+Q16：(10分)
+const string ACCOUNT = "admin";
+const string PASSWORD = "1234";
+
+private bool IsAuthorizedUser(string userName, string passwd)
+{
+    if (userName == ACCOUNT && passwd == PASSWORD)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+
+Q17：(10分) 問答題
+1. `The value of number is 99`
+2. `In ChangeMe, myValue is 0`
+3. `The value of number is 99`
+
+
+
+Q18：(10分) 問答題
+private void SetToZero(out int number)
+{
+    number = 0;
+}
+
+private void goButton_Click(object sender, EventArgs e)
+{
+    int x = 99, y = 100, z = 101;
+
+    outputListBox.Items.Clear();
+    outputListBox.Items.Add("x is set to " + x);
+    outputListBox.Items.Add("y is set to " + y);
+    outputListBox.Items.Add("z is set to " + z);
+
+    SetToZero(out x);  // 改為out
+    SetToZero(out y);  // 改為out
+    SetToZero(out z);  // 改為out
+
+    outputListBox.Items.Add("##########");
+    outputListBox.Items.Add("x is set to " + x);
+    outputListBox.Items.Add("y is set to " + y);
+    outputListBox.Items.Add("z is set to " + z);
+}
+
+x is set to 99
+y is set to 100
+z is set to 101
+
+x is set to 0
+y is set to 0
+z is set to 0

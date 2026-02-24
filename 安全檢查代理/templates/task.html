@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>批改結果</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:1100px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:18px 18px 22px;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    h2{margin:6px 0 10px}
+    .score{font-size:34px;color:#16a34a;margin:4px 0 10px}
+    pre{white-space:pre-wrap;word-break:break-word;background:#0b1020;color:#dbeafe;border-radius:10px;padding:12px;font-size:13px}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{border:1px solid #e5e7eb;padding:8px;text-align:left}
+    .table thead{background:#eef2ff}
+    .table .total{background:#fafafa;font-weight:700}
+    .muted{color:#777}
+    button{padding:8px 14px;border:none;border-radius:8px;background:#4f46e5;color:#fff;font-size:14px;cursor:pointer}
+    button:hover{background:#4338ca}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="muted">任務：{{ task.task_id }} ｜ 科目：{{ task.subject }} ｜ 提詞版本：v<span id="promptVersion">{{ task.prompt_version }}</span></div>
+      <h2>🎯 仲裁後最終分數</h2>
+      <div class="score">{{ "%.2f"|format(task.arbitration.final_score) }}</div>
+      <div class="card" style="padding:10px">
+        {{ task.arbitration.final_table_html|safe }}
+      </div>
+      <div class="muted">仲裁決策：{{ task.arbitration.decision }} ｜ 理由：{{ task.arbitration.reason }}</div>
+    </div>
+
+    {% if task.weakness_review %}
+      <div class="card">
+        <h2>🩺 整卷弱點分析</h2>
+        {% if task.weakness_review.coach_comment %}
+          <p><b>教練短評：</b>{{ task.weakness_review.coach_comment }}</p>
+        {% endif %}
+        <p class="muted">風險分數：{{ task.weakness_review.risk_score }}</p>
+
+        {% if task.weakness_review.weakness_clusters and task.weakness_review.weakness_clusters|length > 0 %}
+          <div class="card" style="padding:10px">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>主題</th>
+                  <th>頻次</th>
+                  <th>相關題號</th>
+                  <th>代表性片語</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for w in task.weakness_review.weakness_clusters %}
+                  <tr>
+                    <td>{{ w.topic }}</td>
+                    <td style="text-align:center">{{ w.frequency }}</td>
+                    <td>{{ (w.evidence_qids or [])|join(", ") }}</td>
+                    <td>
+                      <div class="muted">
+                        {% for s in (w.evidence_snippets or [])[:3] %}
+                          <div>• {{ s }}</div>
+                        {% endfor %}
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+
+        {% if task.weakness_review.prioritized_actions and task.weakness_review.prioritized_actions|length > 0 %}
+          <h3 style="margin:12px 0 6px">優先修正行動</h3>
+          <ul>
+            {% for a in task.weakness_review.prioritized_actions %}
+              <li>
+                <b>{{ a.action }}</b>
+                {% if a.mapping_topics %}<span class="muted">（{{ a.mapping_topics|join("、") }}）</span>{% endif %}
+                {% if a.example_fix %}<div class="muted">例：{{ a.example_fix }}</div>{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if task.weakness_review.practice_suggestions and task.weakness_review.practice_suggestions|length > 0 %}
+          <h3 style="margin:12px 0 6px">練習建議</h3>
+          <ul>
+            {% for s in task.weakness_review.practice_suggestions %}
+              <li>{{ s }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="grid">
+      <div class="card">
+        <h2>🤖 GPT 批改：{{ "%.2f"|format(task.gpt.score) }} 分</h2>
+        {% if task.gpt.part4_table %}
+        <div class="card" style="padding:10px">{{ task.gpt.part4_table|safe }}</div>
+        {% endif %}
+        {% if task.gpt.feedback %}
+          <pre>{{ task.gpt.feedback }}</pre>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <h2>🤖 Claude 批改：{{ "%.2f"|format(task.claude.score) }} 分</h2>
+        {% if task.claude.part4_table %}
+        <div class="card" style="padding:10px">{{ task.claude.part4_table|safe }}</div>
+        {% endif %}
+        {% if task.claude.feedback %}
+          <pre>{{ task.claude.feedback }}</pre>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧠 黑板（本次提詞相關紀錄）</h2>
+      <div id="bb"></div>
+      <div style="margin-top:12px">
+        <button onclick="applyPrompt()">套用建議題詞</button>
+        <span id="applyMsg" class="muted"></span>
+      </div>
+    </div>
+
+    <div><a href="{{ url_for('index', subject=task.subject) }}">← 返回首頁</a></div>
+  </div>
+
+  <script>
+    let suggestedPrompt = "";
+
+    async function loadBB() {
+      const res = await fetch("{{ url_for('api_bb', task_id=task.task_id) }}");
+      const data = await res.json();
+      const bb = document.getElementById('bb');
+      if(!data.length){ 
+        bb.innerHTML='<div class="muted">（無提詞相關紀錄）</div>'; 
+        return; 
+      }
+      bb.innerHTML = data.map(x => {
+        let highlight = "";
+        if(x.type === "suggestion" && x.payload && x.payload.proposed){
+          suggestedPrompt = x.payload.proposed || "";
+          highlight = `<div style="margin-top:6px;padding:6px;background:#eef2ff;border-radius:6px">
+                         <b>Gemini 建議題詞：</b><br><pre style="background:#f8fafc;color:#111;padding:8px;border-radius:6px">${suggestedPrompt}</pre>
+                       </div>`;
+        }
+        return `
+          <div style="margin:8px 0;padding:8px;border-left:4px solid #4f46e5;background:#f8fafc;border-radius:8px">
+            <div><b>${x.action}</b> ｜ <span class="muted">${x.timestamp || ''}</span></div>
+            <div style="white-space:pre-wrap">${x.content}</div>
+            ${highlight}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function applyPrompt(){
+      if(!suggestedPrompt){
+        document.getElementById('applyMsg').innerText = "⚠️ 沒有可套用的建議題詞";
+        return;
+      }
+      const res = await fetch("{{ url_for('api_prompt_apply') }}", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          subject: "{{ task.subject }}",
+          prompt_content: suggestedPrompt,
+          task_id: "{{ task.task_id }}"
+        })
+      });
+      const data = await res.json();
+      if(data.ok){
+        document.getElementById('promptVersion').innerText = data.version;
+        document.getElementById('applyMsg').innerText = "✅ 已更新為 v"+data.version;
+      }else{
+        document.getElementById('applyMsg').innerText = "❌ 套用失敗: "+(data.error || "");
+      }
+    }
+
+    loadBB();
+  </script>
+</body>
+</html>

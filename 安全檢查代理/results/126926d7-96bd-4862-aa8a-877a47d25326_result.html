@@ -1,0 +1,122 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>多代理人批改結果</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 10px;
+                margin-bottom: 30px;
+                text-align: center;
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 10px;
+                margin: 20px 0;
+            }
+            .chat-message {
+                border-left: 4px solid #007bff;
+                padding: 15px;
+                margin: 10px 0;
+                background-color: #f8f9fa;
+                border-radius: 5px;
+            }
+            .chat-message h4 {
+                color: #007bff;
+                margin-bottom: 10px;
+            }
+            .message-content {
+                white-space: pre-wrap;
+                font-family: monospace;
+                background-color: white;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #dee2e6;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+            }
+            .btn:hover {
+                opacity: 0.9;
+            }
+            .security-warning {
+                background-color: #dc3545;
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                margin: 20px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🤖 多代理人協作批改系統</h1>
+            <p>任務ID: 126926d7-96bd-4862-aa8a-877a47d25326</p>
+            <p>考試檔案: Questions.txt</p>
+            <p>學生答案: A111222207廖呈紘.pdf</p>
+        </div>
+        
+        <div class="result-section">
+            <h2>📊 批改結果</h2>
+            
+            
+            <div class="score-display">
+                最終得分: 0 分
+            </div>
+            
+            <h3>批改說明:</h3>
+            <div class="message-content">
+                批改過程發生錯誤：Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-ant-a************************************************************************************************YQAA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+            </div>
+        </div>
+        
+        <div class="result-section">
+            
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; color: #666;">
+            <p>多代理人程式批改系統 © 2025 | 基於協作型生成式AI技術</p>
+        </div>
+    </body>
+    </html>
+    

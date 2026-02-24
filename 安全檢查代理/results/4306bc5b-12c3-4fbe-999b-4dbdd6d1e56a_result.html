@@ -1,0 +1,209 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>題目級別批改結果 - 4306bc5b-12c3-4fbe-999b-4dbdd6d1e56a</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .questions-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .question-card {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border-left: 4px solid #667eea;
+                transition: transform 0.2s;
+            }
+            .question-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .question-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+            .score-badge {
+                background: #28a745;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 15px;
+                font-size: 0.9em;
+                font-weight: bold;
+            }
+            .question-type {
+                color: #666;
+                font-size: 0.9em;
+                margin-bottom: 5px;
+            }
+            .resolution-method {
+                background: #e9ecef;
+                padding: 5px 10px;
+                border-radius: 10px;
+                font-size: 0.85em;
+                display: inline-block;
+                margin: 5px 0;
+            }
+            .discussion-info {
+                color: #666;
+                font-size: 0.85em;
+            }
+            .arbitration-mark {
+                background: #ffc107;
+                color: #856404;
+                padding: 3px 8px;
+                border-radius: 8px;
+                font-size: 0.8em;
+                font-weight: bold;
+                display: inline-block;
+                margin-top: 5px;
+            }
+            .security-warning {
+                background: #dc3545;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 20px 0;
+                border-left: 5px solid #721c24;
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🤖 題目級別協作批改結果</h1>
+            <p><strong>任務ID:</strong> 4306bc5b-12c3-4fbe-999b-4dbdd6d1e56a</p>
+            <p><strong>考試檔案:</strong> Questions.txt</p>
+            <p><strong>學生答案:</strong> A113221016鄧至良.pdf</p>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 總體評分結果</h2>
+            <div class="score-display">
+                最終得分: 0.0 / 0 分 (0.0%)
+            </div>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>📝 完整批改報告</h2>
+            <div class="reasoning-content">批改過程發生錯誤: 題目分析失敗，無法識別題目結構</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-15 17:06:13</p>
+            <p>🤖 採用題目級別協作批改架構</p>
+            <p>✨ 支援逐題討論與智能仲裁機制</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '題目級別批改報告_4306bc5b-12c3-4fbe-999b-4dbdd6d1e56a.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

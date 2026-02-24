@@ -1,0 +1,5 @@
+Q15: nan
+Q16: nan
+Q17: The value of number is 99
+ In ChangeMe, myValue is 0
+Q18: ##########

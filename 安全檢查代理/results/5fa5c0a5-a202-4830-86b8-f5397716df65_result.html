@@ -1,0 +1,396 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>協作型評分結果 - 5fa5c0a5-a202-4830-86b8-f5397716df65</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .result-section {
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            .score-display {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #28a745;
+                text-align: center;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                margin: 20px 0;
+                border: 3px solid #28a745;
+            }
+            .experts-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin: 20px 0;
+            }
+            .expert-card {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                border-left: 4px solid #667eea;
+            }
+            .expert-card.gpt4 {
+                border-left-color: #0066cc;
+            }
+            .expert-card.claude {
+                border-left-color: #8b5cf6;
+            }
+            .expert-card .score-display {
+                font-size: 1.5em;
+                padding: 10px;
+                margin: 10px 0;
+                border: 2px solid currentColor;
+            }
+            .score-analysis {
+                background: #e9ecef;
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+            .consensus {
+                color: #28a745;
+                font-weight: bold;
+            }
+            .arbitration {
+                color: #ffc107;
+                font-weight: bold;
+            }
+            .discussion-views {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .view-card {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                border-left: 3px solid #667eea;
+            }
+            .security-warning, .security-info {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                padding: 20px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                color: #856404;
+            }
+            .security-info.medium {
+                background: #d1ecf1;
+                border-color: #bee5eb;
+                color: #0c5460;
+            }
+            .security-info.high {
+                background: #f8d7da;
+                border-color: #f5c6cb;
+                color: #721c24;
+            }
+            .reasoning-content {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                line-height: 1.4;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            .btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            .footer-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            h2 {
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🤖 協作型生成式AI代理人評分系統</h1>
+            <h2>⚖️ 仲裁裁決</h2>
+            <p><strong>任務ID:</strong> 5fa5c0a5-a202-4830-86b8-f5397716df65</p>
+            <p><strong>考試檔案:</strong> Questions.txt</p>
+            <p><strong>學生答案:</strong> allanswer.txt</p>
+            <p><small>專家分歧，仲裁介入</small></p>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>🎯 最終評分結果</h2>
+            <div class="score-display">
+                最終得分: 100.0 / 100 分 (100.0%)
+            </div>
+            <div class="method-info">
+                <p><strong>評分方式：</strong> 專家分歧，仲裁介入</p>
+                <p><strong>處理狀態：</strong> ✅ 安全</p>
+            </div>
+        </div>
+        
+        
+        <div class="result-section">
+            <h2>🤖 專家評分詳情</h2>
+            <div class="experts-grid">
+                <div class="expert-card gpt4">
+                    <h3>🔹 ChatGPT </h3>
+                    <div class="score-display">4.0 分</div>
+                </div>
+                <div class="expert-card claude">
+                    <h3>🔸 Claude </h3>
+                    <div class="score-display">100.0 分</div>
+                </div>
+            </div>
+            <div class="score-analysis">
+                <p><strong>分數差異：</strong> 96.0 分 (96.0%)</p>
+                <p class="arbitration">⚖️ 差異較大，啟動仲裁程序</p>
+            </div>
+        </div>
+        
+        
+        
+        <div class="result-section">
+            <h2>💬 專家討論摘要</h2>
+            <p><strong>討論輪次：</strong> 2 次</p>
+            <div class="discussion-views">
+                <div class="view-card">
+                    <h4>GPT-4 觀點</h4>
+                    <p>在這種情況下，我們需要仔細檢查每個問題的評分標準和學生的答案，以確定是否有任何分歧。以下是我的觀點和評分依據：
+
+### Q1 (2分)
+- **學生答案：** `6`
+- **我的評分：** 2/2分
+- **理由：** 學生正確地指出 `(int)` 轉型會截斷小數部分，這符合題目的要求。答案和解釋都正確，因此應該給滿分。
+
+### Q2 (4分)
+- **學生答案：**
+  - a. `co...</p>
+                </div>
+                <div class="view-card">
+                    <h4>Claude 觀點</h4>
+                    <p>讓我仔細分析這個評分差異：
+
+1. Q1 (2分)
+- 學生答案"6"完全正確
+- 並提供了清楚的解釋說明強制轉型的原理
+- 應得2分
+
+2. Q2 (4分) 
+- 學生使用組合指定運算子(+=, -=, *=, /=)重寫了所有4個語句
+- 答案完全符合要求
+- 應得4分
+
+3. Q3 (4分)
+- 雖然答案未完整顯示，但從可見部分可以看出:
+  - 正確使用try-catch結構
+  - 正確...</p>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="result-section">
+            <h2>📝 完整評分報告</h2>
+            <div class="reasoning-content">
+# 協作型評分系統報告 - 仲裁裁決
+
+## 📊 最終評分結果
+**仲裁最終得分：100.0 分**
+
+### 🤖 初始專家評分
+**GPT-4 專家：** 4.0分
+**Claude 專家：** 100.0分
+**分數差異：** 96.0分
+
+### ⚖️ 仲裁決定
+**仲裁者：** Gemini
+**仲裁方式：** gemini_arbitration
+
+### 📝 GPT-4 專家詳細評分
+### Q1：(2分) 問答題
+**題目：** 以下程式碼執行後，wholePieces變數將包含什麼值？
+```csharp
+double totalPieces = 6.5;
+int wholePieces = (int)totalPieces;
+```
+
+**學生答案：** `6`
+
+**批改詳細過程：**
+- 功能正確性檢查: 答案正確，因為 `(int)` 轉型會截斷小數部分。
+- 邏輯正確性檢查: 答案符合題意。
+- 語法結構檢查: 無需檢查語法。
+
+**得分細節與原因:** 答案正確，得分2/2。
+
+---
+
+### Q2：(4分) 題組
+**題目：** 使用組合指定運算子重寫以下語句：
+
+**學生答案：**
+- a. `count += 1;`
+- b. `amount -= 5;`
+- c. `radius *= 10;`
+- d. `length /= 2;`
+
+**批...
+
+### 📝 Claude 專家詳細評分
+我將依照規範進行逐題批改與評分。
+
+### 逐題分析與評分
+
+#### Q1 (2分)
+- 答案正確：6
+- 解釋完整且正確
+得分：2/2分
+
+#### Q2 (4分)
+- 四個運算子使用完全正確
+- 格式清晰
+得分：4/4分
+
+#### Q3 (4分)
+- try-catch結構正確
+- 包含必要的型別轉換
+- 錯誤處理完善
+得分：4/4分
+
+#### Q4 (2分)
+- 使用Math.Pow正確
+- 型別宣告正確
+得分：2/2分
+
+#### Q5 (5分)
+- 閏年判斷邏輯完全正確
+- 條件運算符使用恰當
+- 訊息顯示完整
+得分：5/5分
+
+#### Q6 (5分)
+- TryParse使用正確
+- 錯誤處理完善
+- 結果顯示清楚
+得分：5/5分
+
+#### Q7 (5分)
+- 選取項目檢查邏輯正確
+- 包含null檢查
+- 錯誤處理完善
+得分：5/5分
+
+#### Q8 (2分)
+-...
+
+### ⚖️ 仲裁理由
+好的，我將根據仲裁原則，綜合考慮兩位專家的意見，對學生的考卷進行最終評分。
+
+首先，針對兩位評分者意見不一致的地方進行重點分析：
+
+*   **Q3：(4分) 撰寫程式**
+
+    *   GPT4_Grader：給 4/4 分，認為學生提供了正確的 `try-catch` 結構，且包含必要的型別轉換和錯誤處理。
+    *   Claude_Grader：認為雖然答案未完整顯示，但從可見部分可看出基本框架正確，因此給 2 分。
+
+    *仲裁：*  題目要求編寫 `try-catch` 語句，學生答案已呈現 `try-catch` 的完整結構，並包含 `int.Parse` 進行型別轉換，以及 `MessageBox.Show` 處理錯誤。因此，我認為 GPT4_Grader 的評分更合理。
+
+*   **Q4、Q5 (總共 7 分)**
+    *   Claude_Grader：未見學生回答，給 0 分。
+    *   GPT4_Grader：認為兩題答案正確，分別給 2/2 和 5/5 分。
+
+    *仲裁：* 根據學生提供的答案，Q4 和 Q5 都有完整回答，且 GPT4_Grader 針對答案的評估是合理的。因此，應採納 GPT4_Grader 的評分。
+
+綜合以上分析，我認為 GPT4_Grader 的評分更準確。
+
+**仲裁最終得分：100 分**
+...
+
+---
+**評分方式：** 仲裁裁決
+**完成時間：** 2025-07-28 21:49:32
+</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.print()">🖨️ 列印結果</button>
+            <a href="/" class="btn">🏠 返回首頁</a>
+            <button class="btn" onclick="downloadResult()">💾 下載報告</button>
+        </div>
+        
+        <div class="footer-info">
+            <p>批改時間: 2025-07-28 21:49:32</p>
+            <p>🤖 協作型生成式AI代理人評分系統</p>
+            <p>📋 基於論文研究設計的多代理協作架構</p>
+            <p>🔒 集成安全檢查與智能仲裁機制</p>
+        </div>
+        
+        <script>
+            function downloadResult() {
+                const content = document.body.innerHTML;
+                const blob = new Blob([content], {type: 'text/html'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '協作型評分報告_5fa5c0a5-a202-4830-86b8-f5397716df65.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        </script>
+    </body>
+    </html>
+    

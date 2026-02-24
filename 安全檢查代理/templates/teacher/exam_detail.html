@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{{ exam.title }} - 考試詳情</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7fb;margin:0;padding:24px}
+    .wrap{max-width:1200px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-bottom:24px}
+    h1{margin:0 0 8px;font-size:24px;color:#1f2937}
+    .exam-meta{color:#6b7280;margin-bottom:20px}
+    .status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+    .status-draft{background:#fef3c7;color:#92400e}
+    .status-active{background:#dbeafe;color:#1e40af}
+    .status-grading{background:#fce7f3;color:#be185d}
+    .status-completed{background:#d1fae5;color:#065f46}
+    .btn{display:inline-block;background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:500;margin-right:8px;margin-bottom:8px}
+    .btn:hover{background:#4338ca}
+    .btn-success{background:#10b981}
+    .btn-success:hover{background:#059669}
+    .btn-warning{background:#f59e0b}
+    .btn-warning:hover{background:#d97706}
+    .btn-secondary{background:#6b7280}
+    .btn-secondary:hover{background:#4b5563}
+    .btn-danger{background:#ef4444}
+    .btn-danger:hover{background:#dc2626}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
+    .stat-item{background:#f8fafc;border-radius:8px;padding:16px;text-align:center}
+    .stat-number{font-size:24px;font-weight:700;color:#4f46e5;margin:0}
+    .stat-label{color:#6b7280;font-size:12px;margin:4px 0 0}
+    .section{margin-bottom:24px}
+    .section h2{margin:0 0 16px;font-size:18px;color:#1f2937}
+    .submission-list{display:grid;gap:12px}
+    .submission-item{background:#f8fafc;border-radius:8px;padding:16px;border-left:4px solid #4f46e5}
+    .submission-meta{color:#6b7280;font-size:12px;margin-bottom:8px}
+    .submission-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .empty-state{text-align:center;padding:40px;color:#6b7280}
+    .empty-state h3{margin:0 0 8px;color:#374151}
+    .empty-state p{margin:0 0 20px}
+    .back-link{display:inline-block;margin-bottom:20px;color:#4f46e5;text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .alert{padding:12px 16px;border-radius:8px;margin-bottom:20px}
+    .alert-info{background:#eff6ff;color:#1e40af;border-left:4px solid #3b82f6}
+    .alert-warning{background:#fffbeb;color:#92400e;border-left:4px solid #f59e0b}
+    .alert-success{background:#f0fdf4;color:#16a34a;border-left:4px solid #10b981}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← 返回儀表板</a>
+    
+    <div class="card">
+      <h1>{{ exam.title }}</h1>
+      <div class="exam-meta">
+        科目：{{ exam.subject }} | 
+        創建時間：{{ exam.created_at.strftime('%Y-%m-%d %H:%M') }} | 
+        狀態：<span class="status status-{{ exam.status }}">{{ exam.status }}</span>
+        {% if exam.description %}
+          <br>描述：{{ exam.description }}
+        {% endif %}
+      </div>
+
+      <!-- 統計資訊 -->
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">{{ total_submissions }}</div>
+          <div class="stat-label">提交數量</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ completed_gradings }}</div>
+          <div class="stat-label">已完成批改</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ exam.max_score }}</div>
+          <div class="stat-label">滿分</div>
+        </div>
+      </div>
+
+      <!-- 操作按鈕 -->
+      <div class="section">
+        <h2>操作</h2>
+        {% if exam.status == 'draft' %}
+          <div class="alert alert-info">
+            <strong>考試已創建</strong> - 請上傳學生答案檔案開始批改
+          </div>
+          <a href="{{ url_for('upload_answers', exam_id=exam.exam_id) }}" class="btn btn-success">📁 上傳學生答案</a>
+        {% elif exam.status == 'active' %}
+          <div class="alert alert-warning">
+            <strong>考試進行中</strong> - 可以繼續上傳答案或開始批改
+          </div>
+          <a href="{{ url_for('upload_answers', exam_id=exam.exam_id) }}" class="btn btn-success">📁 上傳更多答案</a>
+          <button onclick="startGrading()" class="btn btn-warning">🚀 開始批改</button>
+        {% elif exam.status == 'grading' %}
+          <div class="alert alert-warning">
+            <strong>批改進行中</strong> - 請稍候，系統正在處理...
+          </div>
+          <button onclick="checkStatus()" class="btn btn-secondary">🔄 檢查狀態</button>
+        {% elif exam.status == 'completed' %}
+          <div class="alert alert-success">
+            <strong>批改完成</strong> - 所有答案已批改完成
+          </div>
+          <a href="{{ url_for('exam_results', exam_id=exam.exam_id) }}" class="btn btn-success">📊 查看結果</a>
+          <a href="{{ url_for('export_results', exam_id=exam.exam_id) }}" class="btn btn-secondary">📥 匯出Excel</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- 提交列表 -->
+    <div class="card">
+      <div class="section">
+        <h2>學生提交 ({{ total_submissions }})</h2>
+        {% if submissions %}
+          <div class="submission-list">
+            {% for submission in submissions %}
+              <div class="submission-item">
+                <div class="submission-meta">
+                  學生ID：{{ submission.student_id }} | 
+                  檔案：{{ submission.answer_file }} | 
+                  提交時間：{{ submission.submitted_at.strftime('%Y-%m-%d %H:%M') }} | 
+                  狀態：<span class="status status-{{ submission.status }}">{{ submission.status }}</span>
+                </div>
+                <div class="submission-actions">
+                  {% if submission.status == 'completed' %}
+                    <a href="{{ url_for('exam_results', exam_id=exam.exam_id) }}" class="btn btn-sm">查看結果</a>
+                  {% elif submission.status == 'failed' %}
+                    <span style="color:#dc2626;font-size:12px">批改失敗</span>
+                  {% else %}
+                    <span style="color:#6b7280;font-size:12px">等待批改</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <h3>還沒有學生提交答案</h3>
+            <p>請上傳學生答案檔案</p>
+            <a href="{{ url_for('upload_answers', exam_id=exam.exam_id) }}" class="btn">上傳答案</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function startGrading() {
+      if (!confirm('確定要開始批改嗎？這可能需要一些時間。')) {
+        return;
+      }
+      
+      fetch('{{ url_for("start_grading", exam_id=exam.exam_id) }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          location.reload();
+        } else {
+          alert('錯誤：' + data.message);
+        }
+      })
+      .catch(error => {
+        alert('發生錯誤：' + error);
+      });
+    }
+
+    function checkStatus() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
+
